@@ -99,13 +99,10 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <MediaElement Name="MyMediaElement" AutoPlay="True" />
-                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
+                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30"/>
                 <Viewbox Grid.Row="0">
                     <TextBlock x:Name="secondsShow" Foreground="{Binding TextForeground}" Text="Loading..." HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
-                </Viewbox>
-                <Viewbox Grid.Row="1">
-                    <AppBarButton Foreground="{Binding TextForeground}" Icon="Clock" Label="+1s" FontFamily="Impact" IsCompact="False" Click="SecondGet_Click" HorizontalAlignment="Center"/>
                 </Viewbox>
 
                 <Viewbox Grid.Row="0">
@@ -118,7 +115,13 @@
                         </TextBlock.RenderTransform>
                     </TextBlock>
                 </Viewbox>
-                <AppBarButton Foreground="{Binding TextForeground}" Icon="Setting" IsCompact="True" Height="50" Width="30" HorizontalAlignment="left" VerticalAlignment="Bottom" Grid.Row="1" Click="Settings_Click"/>
+                
+                <Viewbox Grid.Row="1">
+                    <AppBarButton Foreground="{Binding TextForeground}" Icon="Clock" Label="+1s" FontFamily="Impact" IsCompact="False" Click="SecondGet_Click" HorizontalAlignment="Center"/>
+                </Viewbox>
+                <Viewbox Grid.Row="1" HorizontalAlignment="Left">
+                    <AppBarButton Foreground="{Binding TextForeground}" Icon="Setting" Label="设置" IsCompact="False" Click="Settings_Click"/>
+                </Viewbox>
             </Grid>
         </SplitView.Content>
     </SplitView>

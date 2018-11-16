@@ -140,7 +140,7 @@ namespace addOneSecond
             {
                 using (StreamReader read = new StreamReader(file))
                 {
-                    s = read.ReadToEnd();
+                    s = await read.ReadToEndAsync();
                 }
             }
 
@@ -167,24 +167,23 @@ namespace addOneSecond
                 {
                     using (StreamWriter write = new StreamWriter(file))
                     {
-                        write.Write(string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10}",
-                                                    Model.FullScreen,
-                                                    Model.AutoAdd,
-                                                    BackGroundColorRedSlider.Value,
-                                                    BackGroundColorGreenSlider.Value,
-                                                    BackGroundColorBlueSlider.Value,
-                                                    BackGroundAcrylicOpacitySlider.Value,
-                                                    FontColorRedSlider.Value,
-                                                    FontColorGreenSlider.Value,
-                                                    FontColorBlueSlider.Value,
-                                                    Model.DisplayRequest,
-                                                    Model.PlayAudio
-                                                   ));
+                        await write.WriteAsync(
+                            string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10}",
+                                Model.FullScreen,
+                                Model.AutoAdd,
+                                BackGroundColorRedSlider.Value,
+                                BackGroundColorGreenSlider.Value,
+                                BackGroundColorBlueSlider.Value,
+                                BackGroundAcrylicOpacitySlider.Value,
+                                FontColorRedSlider.Value,
+                                FontColorGreenSlider.Value,
+                                FontColorBlueSlider.Value,
+                                Model.DisplayRequest,
+                                Model.PlayAudio));
                     }
                 }
             }
             catch (Exception) { }
-
         }
 
         private async Task GetSettings()
@@ -205,7 +204,7 @@ namespace addOneSecond
             {
                 using (StreamReader read = new StreamReader(file))
                 {
-                    s = read.ReadToEnd();
+                    s = await read.ReadToEndAsync();
                 }
             }
 
