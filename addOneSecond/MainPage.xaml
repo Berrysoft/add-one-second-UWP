@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded" Unloaded="Page_Unloaded">
+    Loaded="Page_Loaded">
     <Page.DataContext>
         <local:MainViewModel x:Name="Model"/>
     </Page.DataContext>
@@ -33,21 +33,17 @@
         <local:SecondToTotalConverter x:Key="SecondToTotal"/>
         <local:SecondToRealTimeConverter x:Key="SecondToRealTime"/>
     </Page.Resources>
-    <SplitView Name="mainSplitView" DisplayMode="Overlay" OpenPaneLength="300">
+    <SplitView Name="mainSplitView" DisplayMode="Overlay" PaneBackground="{ThemeResource SystemControlAcrylicElementBrush}" OpenPaneLength="300">
         <SplitView.Pane>
-            <ScrollViewer Background="#FFD9D9D9">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="设置" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
-                    <ToggleSwitch Name="isfullScreen" OffContent="全屏已关闭" OnContent="全屏已开启" Margin="5" Toggled="IsfullScreen_Toggled"/>
-                    <ToggleSwitch Name="isAutoAddOneSecondOpen" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" Margin="5" Toggled="IsAutoAddOneSecondOpen_Toggled"/>
-                    <ToggleSwitch Name="isTileFresh" OffContent="动态磁贴已关闭" OnContent="动态磁贴已开启（半小时一刷新）" Margin="5" Toggled="IsTileFresh_Toggled"/>
-                    <ToggleSwitch Name="isDisplayRequest" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" Margin="5" Toggled="IsDisplayRequest_Toggled"/>
-                    <ToggleSwitch Name="isPlayAudio" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" Margin="5" Toggled="IsPlayAudio_Toggled"/>
-                    <TextBlock Text="关闭本软件后，对小娜说 续一秒 即可死机续命（我也不知道为什么会死机啊，明明设置的是打开这个软件，希望懂的人帮忙改改。）本软件运行时，此指令能开启自动+1s功能。" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="背景颜色：" FontSize="22" Margin="5"/>
-                        <Button Name="ApplyBackGroungColor" Content="保存设置" Margin="5" Click="ApplyBackGroungColor_Click"/>
-                    </StackPanel>
+            <ScrollViewer>
+                <StackPanel Margin="10" Orientation="Vertical">
+                    <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="5">设置</TextBlock>
+                    <ToggleSwitch OffContent="全屏已关闭" OnContent="全屏已开启" Margin="5" IsOn="{Binding FullScreen,Mode=TwoWay}"/>
+                    <ToggleSwitch OffContent="自动+1s已关闭" OnContent="自动+1s已开启" Margin="5" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
+                    <ToggleSwitch OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" Margin="5" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
+                    <ToggleSwitch OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" Margin="5" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="5,5,20,5" TextWrapping="Wrap">关闭本软件后，对小娜说 续一秒 即可死机续命（我也不知道为什么会死机啊，明明设置的是打开这个软件，希望懂的人帮忙改改。）本软件运行时，此指令能开启自动+1s功能。</TextBlock>
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="5">背景颜色</TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -59,19 +55,16 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="红：" FontSize="20" Margin="5"/>
-                        <Slider Name="BackGroundColorRedSlider"  Grid.Column="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorRedSlider_ValueChanged"/>
-                        <TextBlock Text="绿：" FontSize="20" Margin="5" Grid.Row="1"/>
-                        <Slider Name="BackGroundColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorGreenSlider_ValueChanged"/>
-                        <TextBlock Text="蓝：" FontSize="20" Margin="5" Grid.Row="2"/>
-                        <Slider Name="BackGroundColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorBlueSlider_ValueChanged"/>
-                        <TextBlock Text="透：" FontSize="20" Margin="5" Grid.Row="3"/>
-                        <Slider Name="BackGroundAcrylicBlueSlider" Grid.Column="1" Grid.Row="3" Maximum="100" Width="220" Margin="2,0,20,0" Value="50" ValueChanged="BackGroundAcrylicBlueSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="0">红</TextBlock>
+                        <Slider Name="BackGroundColorRedSlider"  Grid.Column="1" Grid.Row="0" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="1">绿</TextBlock>
+                        <Slider Name="BackGroundColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="2">蓝</TextBlock>
+                        <Slider Name="BackGroundColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="3">透</TextBlock>
+                        <Slider Name="BackGroundAcrylicOpacitySlider" Grid.Column="1" Grid.Row="3" Maximum="100" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
                     </Grid>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="字体颜色：" FontSize="22" Margin="5"/>
-                        <Button Name="ApplyFontColor" Content="保存设置" Margin="5" Click="ApplyFontColor_Click"/>
-                    </StackPanel>                    
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="5">字体颜色</TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -82,29 +75,24 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="红：" FontSize="20" Margin="5"/>
-                        <Slider Name="FontColorRedSlider" Grid.Column="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorRedSlider_ValueChanged"/>
-                        <TextBlock Text="绿：" FontSize="20" Margin="5" Grid.Row="1"/>
-                        <Slider Name="FontColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorGreenSlider_ValueChanged"/>
-                        <TextBlock Text="蓝：" FontSize="20" Margin="5" Grid.Row="2"/>
-                        <Slider Name="FontColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorBlueSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="0">红</TextBlock>
+                        <Slider Name="FontColorRedSlider" Grid.Column="1" Grid.Row="0" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="1">绿</TextBlock>
+                        <Slider Name="FontColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorSlider_ValueChanged"/>
+                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="2">蓝</TextBlock>
+                        <Slider Name="FontColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorSlider_ValueChanged"/>
                     </Grid>
-                    <TextBlock Text="关于" FontSize="22" Margin="5"/>
-                    <TextBlock Text="本软件用于时间众筹项目，欢迎大家帮助本软件实现更多功能。提交新功能的建议可以直接在应用商店评论该软件~" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="本软件利用了angry.im提供的api进行处理，并将结果显示在软件中。" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="感谢https://angry.im/提供的api。" IsTextSelectionEnabled="True" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="你也可以在github上参与本软件的编写与优化：" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="https://github.com/chenxuuu/add-one-second-UWP" IsTextSelectionEnabled="True" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="如果你喜欢这个软件的话，可以让作者吃顿好的（哪里不对）：" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="支付宝：liucx1@foxmail.com" IsTextSelectionEnabled="True" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
-                    <TextBlock Text="paypal：https://www.paypal.me/chenxuuu" IsTextSelectionEnabled="True" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
+                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="5">关于</TextBlock>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="5,5,20,5" TextWrapping="Wrap">本软件利用了angry.im提供的api进行处理，并将结果显示在软件中。</TextBlock>
+                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" IsTextSelectionEnabled="True" Margin="5,5,20,5" TextWrapping="Wrap">感谢https://angry.im/提供的api。</TextBlock>
+                    <HyperlinkButton Margin="5,5,20,5" NavigateUri="https://github.com/Berrysoft/add-one-second-UWP/">项目地址</HyperlinkButton>
                 </StackPanel>
             </ScrollViewer>
         </SplitView.Pane>
         <SplitView.Content>
             <Grid Name="mainGrid">
                 <Grid.Background>
-                    <AcrylicBrush BackgroundSource="HostBackdrop"/>
+                    <AcrylicBrush BackgroundSource="HostBackdrop" TintColor="{Binding PageBackgroundColor}" FallbackColor="{Binding PageBackgroundColor}" TintOpacity="{Binding PageBackgroundOpacity}"/>
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*"/>
