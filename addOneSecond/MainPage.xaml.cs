@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -17,13 +20,11 @@ using Windows.UI;
 using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Notifications;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Media.Playback;
 using Windows.Media.Core;
 using Windows.ApplicationModel.Core;
-
-// https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
+using Windows.ApplicationModel.VoiceCommands;
 
 namespace addOneSecond
 {
@@ -32,39 +33,37 @@ namespace addOneSecond
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        DispatcherTimer timer;//定义定时器
+        DispatcherTimer timer = new DispatcherTimer();//定义定时器
         Random rankey = new Random();
+        static HttpClient client = new HttpClient();
 
         public MainPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)  //页面加载完毕
         {
             GetSettings();
-            timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 1);
+            timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;//每秒触发这个事件，以刷新时间
             timer.Start();  //开始计时器
 
-            var storageFile =
-                        await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(
-                        new Uri("ms-appx:///VoiceCommandDictionary.xml"));
-            await Windows.ApplicationModel.VoiceCommands.VoiceCommandDefinitionManager
-                        .InstallCommandDefinitionsFromStorageFileAsync(storageFile);     //加载语音字典
+            var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceCommandDictionary.xml"));
+            await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(storageFile);     //加载语音字典
 
-            Windows.ApplicationModel.Core.CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             //覆盖电脑状态栏
+            var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            titleBar.BackgroundColor = Colors.Transparent;
+            titleBar.ButtonBackgroundColor = Colors.Transparent;
+            titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
-            try  //加载秒数统计
-            {
-                long total;
-                total = await GetTotalSecond();
-                SaveTotalSecond(total);
-                secondTotalShow.Text = $"你已经贡献了{total}秒";
-            }
-            catch { }
+            //加载秒数统计
+            long total;
+            total = await GetTotalSecond();
+            SaveTotalSecond(total);
+            secondTotalShow.Text = $"你已经贡献了{total}秒";
         }
 
         private async void Timer_Tick(object sender, object e)    //1s定时执行
@@ -72,49 +71,42 @@ namespace addOneSecond
             if (isAutoAddOneSecondOpen.IsOn)
             {
                 PlayAudio();
-                this.addedOneSecondStoryboard.Begin();  //+1s动画
+                addedOneSecondStoryboard.Begin();  //+1s动画
                 try
                 {
-                    await webLib.HttpPost("https://angry.im/p/life", "+1s");  //post用来+1s
+                    await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));//post用来+1s
                     SecondAdd();
                 }
-                catch { }
+                catch (Exception) { }
             }
-            string result;
             try
             {
-                string allSecondsString = await webLib.HttpGet("https://angry.im/l/life");  //获取秒数
+                string allSecondsString = await client.GetStringAsync("https://angry.im/l/life");  //获取秒数
                 long allSeconds = long.Parse(allSecondsString);   //转换成long
-                long dd, mm, hh, ss;     //用于存储最终数值
-                dd = allSeconds / 60 / 60 / 24;
-                hh = allSeconds / 60 / 60 % 24;
-                mm = allSeconds / 60 % 60;
-                ss = allSeconds % 60;
-                result = $"{dd}:{hh.ToString().PadLeft(2,'0')}:{mm.ToString().PadLeft(2, '0')}:{ss.ToString().PadLeft(2, '0')}";
-                secondsShow.Text = result;  //显示结果
+                TimeSpan span = TimeSpan.FromSeconds(allSeconds);
+                secondsShow.Text = span.ToString("d\\:hh\\:mm\\:ss");  //显示结果
             }
-            catch { }
+            catch (Exception) { }
             await ShowRealTime();
         }
 
         private async void secondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
         {
             PlayAudio();
-            this.addedOneSecondStoryboard.Begin();  //+1s动画
+            addedOneSecondStoryboard.Begin();  //+1s动画
             try
             {
-                await webLib.HttpPost("https://angry.im/p/life", "+1s");  //post用来+1s
+                await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));//post用来+1s
                 SecondAdd();
             }
-            catch { }
+            catch (Exception) { }
         }
 
         private void PlayAudio() //播放声音
         {
-            if(MyMediaElement.CurrentState.ToString() != "Playing" && isPlayAudio.IsOn)
+            if (MyMediaElement.CurrentState.ToString() != "Playing" && isPlayAudio.IsOn)
             {
-                MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/"+ rankey.Next(1,10)+ ".wav");
-                //MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/coin.mp3");
+                MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/" + rankey.Next(1, 10) + ".wav");
             }
         }
 
@@ -122,16 +114,16 @@ namespace addOneSecond
         {
             mainSplitView.IsPaneOpen = !mainSplitView.IsPaneOpen;  //开关SplitView设置页
         }
-        
+
         private void isfullScreen_Toggled(object sender, RoutedEventArgs e)  //全屏按钮
         {
             if (isfullScreen.IsOn)
             {
-                Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryEnterFullScreenMode();  //全屏
+                ApplicationView.GetForCurrentView().TryEnterFullScreenMode();  //全屏
             }
             else
             {
-                Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().ExitFullScreenMode();
+                ApplicationView.GetForCurrentView().ExitFullScreenMode();
             }
             SaveSettings();
         }
@@ -176,7 +168,7 @@ namespace addOneSecond
                     }
                 }
             }
-            catch { }
+            catch (Exception) { }
         }  //保存总秒数
 
         private async Task<long> GetTotalSecond()
@@ -197,17 +189,14 @@ namespace addOneSecond
                 }
             }
 
-            long seconds;
-            try
+            if (long.TryParse(s, out long seconds))
             {
-                seconds = long.Parse(s);
+                return seconds;
             }
-            catch
+            else
             {
-                seconds = 0;
+                return 0;
             }
-
-            return seconds;
         }  //获取总秒数
 
         private async void SaveSettings()    //保存设置
@@ -240,7 +229,7 @@ namespace addOneSecond
                     }
                 }
             }
-            catch { }
+            catch (Exception) { }
 
         }
 
@@ -266,8 +255,8 @@ namespace addOneSecond
                     s = read.ReadToEnd();
                 }
             }
-            
-            
+
+
             if (s.IndexOf(";") >= 1 && s.IndexOf(";") != s.Length - 1)
             {
                 string[] str2;
@@ -367,7 +356,7 @@ namespace addOneSecond
                     }
                 }
             }
-            SetBcakGroundColor();
+            SetBackGroundColor();
             SetForeColor();
         }   //加载设置
 
@@ -378,17 +367,17 @@ namespace addOneSecond
 
         private void BackGroundColorRedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //背景颜色调节
         {
-            SetBcakGroundColor();
+            SetBackGroundColor();
         }
 
         private void BackGroundColorGreenSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //背景颜色调节
         {
-            SetBcakGroundColor();
+            SetBackGroundColor();
         }
 
         private void BackGroundColorBlueSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //背景颜色调节
         {
-            SetBcakGroundColor();
+            SetBackGroundColor();
         }
 
         private void FontColorRedSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //颜色调节
@@ -421,7 +410,7 @@ namespace addOneSecond
         {
             try
             {
-                string allSecondsString = await webLib.HttpGet("https://angry.im/l/life");  //获取秒数
+                string allSecondsString = await client.GetStringAsync("https://angry.im/l/life");  //获取秒数
                 long allSeconds = long.Parse(allSecondsString);   //转换成long
                 long dd, mm, hh, ss;     //用于存储最终数值
                 dd = allSeconds / 60 / 60 / 24;
@@ -439,7 +428,7 @@ namespace addOneSecond
                 var tileNotification = new TileNotification(tileXml);
                 TileUpdateManager.CreateTileUpdaterForApplication().Update(tileNotification);
             }
-            catch { }
+            catch (Exception) { }
 
             var tileContent = new Uri("https://www.chenxublog.com/getsecond.php");  //自建网站
             var requestedInterval = PeriodicUpdateRecurrence.HalfHour;   //半小时一次
@@ -491,31 +480,35 @@ namespace addOneSecond
             }//手机状态栏颜色
         }
 
-        private void SetBcakGroundColor()  //设置背景颜色
+        private void SetBackGroundColor()  //设置背景颜色
         {
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))
+            try
             {
-                Windows.UI.Xaml.Media.AcrylicBrush myBrush = new Windows.UI.Xaml.Media.AcrylicBrush();
-                myBrush.BackgroundSource = Windows.UI.Xaml.Media.AcrylicBackgroundSource.HostBackdrop;
-                myBrush.TintColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-                myBrush.FallbackColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-                myBrush.TintOpacity = BackGroundAcrylicBlueSlider.Value / 100;
-
-                mainGrid.Background = myBrush;
-            }
-            else
-            {
-                SolidColorBrush color = new SolidColorBrush(Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value));
-                mainGrid.Background = color;    //应用背景颜色
-
-                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))
                 {
-                    StatusBar statusBar = StatusBar.GetForCurrentView();
-                    statusBar.BackgroundColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-                    //statusBar.ForegroundColor = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
-                    statusBar.BackgroundOpacity = 1;
-                }//手机状态栏颜色
+                    AcrylicBrush myBrush = new AcrylicBrush();
+                    myBrush.BackgroundSource = AcrylicBackgroundSource.HostBackdrop;
+                    myBrush.TintColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
+                    myBrush.FallbackColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
+                    myBrush.TintOpacity = BackGroundAcrylicBlueSlider.Value / 100;
+
+                    mainGrid.Background = myBrush;
+                }
+                else
+                {
+                    SolidColorBrush color = new SolidColorBrush(Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value));
+                    mainGrid.Background = color;    //应用背景颜色
+
+                    if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+                    {
+                        StatusBar statusBar = StatusBar.GetForCurrentView();
+                        statusBar.BackgroundColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
+                        //statusBar.ForegroundColor = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
+                        statusBar.BackgroundOpacity = 1;
+                    }//手机状态栏颜色
+                }
             }
+            catch (Exception) { }
         }
 
         private async Task ShowRealTime()  //显示被续过的时间
@@ -528,7 +521,7 @@ namespace addOneSecond
                 DateTime timeDeleted = now.AddSeconds(total);
                 realTime.Text = "你的实际时间：" + timeDeleted.ToString("yyyy年MM月dd日 HH:mm:ss");
             }
-            catch { }
+            catch (Exception) { }
         }
 
         public void openAuto()  //语音调用的东西
@@ -545,7 +538,7 @@ namespace addOneSecond
                     isPlayAudio.IsOn = false;
                 }
             }
-            catch
+            catch (Exception)
             {
                 isPlayAudio.IsOn = false;
             }
@@ -554,7 +547,7 @@ namespace addOneSecond
 
         private void BackGroundAcrylicBlueSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SetBcakGroundColor();
+            SetBackGroundColor();
         }
     }
 }
