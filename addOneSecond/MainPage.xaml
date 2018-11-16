@@ -6,8 +6,10 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Loaded="Page_Loaded">
-    
+    Loaded="Page_Loaded" Unloaded="Page_Unloaded">
+    <Page.DataContext>
+        <local:MainViewModel x:Name="Model"/>
+    </Page.DataContext>
     <Page.Resources>
         <CubicEase EasingMode="EaseIn" x:Key="CubicEaseIn" />
         <Storyboard x:Name="addedOneSecondStoryboard">
@@ -28,37 +30,19 @@
                 <DiscreteObjectKeyFrame Value="Collapsed" KeyTime="0:0:0.2" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
+        <local:SecondToTotalConverter x:Key="SecondToTotal"/>
+        <local:SecondToRealTimeConverter x:Key="SecondToRealTime"/>
     </Page.Resources>
     <SplitView Name="mainSplitView" DisplayMode="Overlay" OpenPaneLength="300">
         <SplitView.Pane>
             <ScrollViewer Background="#FFD9D9D9">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="设置" HorizontalAlignment="Center" FontSize="22" Margin="5"/>
-                    <ToggleSwitch Name="isfullScreen"
-                                  OffContent="全屏已关闭" 
-                                  OnContent="全屏已开启" 
-                                  Margin="5"
-                                  Toggled="isfullScreen_Toggled"/>
-                    <ToggleSwitch Name="isAutoAddOneSecondOpen" 
-                                  OffContent="自动+1s已关闭" 
-                                  OnContent="自动+1s已开启" 
-                                  Margin="5"
-                                  Toggled="isAutoAddOneSecondOpen_Toggled"/>
-                    <ToggleSwitch Name="isTileFresh" 
-                                  OffContent="动态磁贴已关闭" 
-                                  OnContent="动态磁贴已开启（半小时一刷新）" 
-                                  Margin="5"
-                                  Toggled="isTileFresh_Toggled"/>
-                    <ToggleSwitch Name="isDisplayRequest" 
-                                  OffContent="屏幕常亮已关闭" 
-                                  OnContent="屏幕常亮已开启" 
-                                  Margin="5"
-                                  Toggled="isDisplayRequest_Toggled"/>
-                    <ToggleSwitch Name="isPlayAudio" 
-                                  OffContent="音效已关闭（贡献2333秒才能开）" 
-                                  OnContent="音效已开启"
-                                  Margin="5"
-                                  Toggled="isPlayAudio_Toggled"/>
+                    <ToggleSwitch Name="isfullScreen" OffContent="全屏已关闭" OnContent="全屏已开启" Margin="5" Toggled="IsfullScreen_Toggled"/>
+                    <ToggleSwitch Name="isAutoAddOneSecondOpen" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" Margin="5" Toggled="IsAutoAddOneSecondOpen_Toggled"/>
+                    <ToggleSwitch Name="isTileFresh" OffContent="动态磁贴已关闭" OnContent="动态磁贴已开启（半小时一刷新）" Margin="5" Toggled="IsTileFresh_Toggled"/>
+                    <ToggleSwitch Name="isDisplayRequest" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" Margin="5" Toggled="IsDisplayRequest_Toggled"/>
+                    <ToggleSwitch Name="isPlayAudio" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" Margin="5" Toggled="IsPlayAudio_Toggled"/>
                     <TextBlock Text="关闭本软件后，对小娜说 续一秒 即可死机续命（我也不知道为什么会死机啊，明明设置的是打开这个软件，希望懂的人帮忙改改。）本软件运行时，此指令能开启自动+1s功能。" Margin="5,5,20,5" TextWrapping="Wrap"/>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="背景颜色：" FontSize="22" Margin="5"/>
@@ -76,37 +60,13 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="红：" FontSize="20" Margin="5"/>
-                        <Slider Name="BackGroundColorRedSlider" 
-                                Grid.Column="1"
-                                Maximum="255"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                ValueChanged="BackGroundColorRedSlider_ValueChanged"/>
+                        <Slider Name="BackGroundColorRedSlider"  Grid.Column="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorRedSlider_ValueChanged"/>
                         <TextBlock Text="绿：" FontSize="20" Margin="5" Grid.Row="1"/>
-                        <Slider Name="BackGroundColorGreenSlider" 
-                                Grid.Column="1" 
-                                Grid.Row="1" 
-                                Maximum="255"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                ValueChanged="BackGroundColorGreenSlider_ValueChanged"/>
+                        <Slider Name="BackGroundColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorGreenSlider_ValueChanged"/>
                         <TextBlock Text="蓝：" FontSize="20" Margin="5" Grid.Row="2"/>
-                        <Slider Name="BackGroundColorBlueSlider" 
-                                Grid.Column="1" 
-                                Grid.Row="2"
-                                Maximum="255"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                ValueChanged="BackGroundColorBlueSlider_ValueChanged"/>
+                        <Slider Name="BackGroundColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorBlueSlider_ValueChanged"/>
                         <TextBlock Text="透：" FontSize="20" Margin="5" Grid.Row="3"/>
-                        <Slider Name="BackGroundAcrylicBlueSlider" 
-                                Grid.Column="1" 
-                                Grid.Row="3"
-                                Maximum="100"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                Value="50"
-                                ValueChanged="BackGroundAcrylicBlueSlider_ValueChanged"/>
+                        <Slider Name="BackGroundAcrylicBlueSlider" Grid.Column="1" Grid.Row="3" Maximum="100" Width="220" Margin="2,0,20,0" Value="50" ValueChanged="BackGroundAcrylicBlueSlider_ValueChanged"/>
                     </Grid>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="字体颜色：" FontSize="22" Margin="5"/>
@@ -123,28 +83,11 @@
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="红：" FontSize="20" Margin="5"/>
-                        <Slider Name="FontColorRedSlider" 
-                                Grid.Column="1" 
-                                Maximum="255"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                ValueChanged="FontColorRedSlider_ValueChanged"/>
+                        <Slider Name="FontColorRedSlider" Grid.Column="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorRedSlider_ValueChanged"/>
                         <TextBlock Text="绿：" FontSize="20" Margin="5" Grid.Row="1"/>
-                        <Slider Name="FontColorGreenSlider" 
-                                Grid.Column="1" 
-                                Grid.Row="1" 
-                                Maximum="255"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                ValueChanged="FontColorGreenSlider_ValueChanged"/>
+                        <Slider Name="FontColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorGreenSlider_ValueChanged"/>
                         <TextBlock Text="蓝：" FontSize="20" Margin="5" Grid.Row="2"/>
-                        <Slider Name="FontColorBlueSlider" 
-                                Grid.Column="1" 
-                                Grid.Row="2" 
-                                Maximum="255"
-                                Width="220"
-                                Margin="2,0,20,0"
-                                ValueChanged="FontColorBlueSlider_ValueChanged"/>
+                        <Slider Name="FontColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorBlueSlider_ValueChanged"/>
                     </Grid>
                     <TextBlock Text="关于" FontSize="22" Margin="5"/>
                     <TextBlock Text="本软件用于时间众筹项目，欢迎大家帮助本软件实现更多功能。提交新功能的建议可以直接在应用商店评论该软件~" FontSize="15" Margin="5,5,20,5" TextWrapping="Wrap"/>
@@ -168,34 +111,17 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <MediaElement Name="MyMediaElement" AutoPlay="True" />
-                <TextBlock Name="secondTotalShow" Text="已贡献时间（加载中。。。）" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                <TextBlock Name="realTime" Text="你的实际时间（加载中。。。）" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,20,0,0"/>
                 <Viewbox Grid.Row="0">
-                    <TextBlock Name="secondsShow" 
-                       Text="Loading..."
-                       HorizontalAlignment="Center" 
-                       Margin="3" 
-                       FontFamily="Consolas" 
-                       FontWeight="Bold"
-                       />
+                    <TextBlock x:Name="secondsShow" Foreground="{Binding TextForeground}" Text="Loading..." HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1">
-                    <AppBarButton Name="secondGet" 
-                          Icon="Clock" 
-                          Label="+1s" 
-                          FontFamily="Impact"
-                          IsCompact="False" 
-                          Click="secondGet_Click" 
-                          HorizontalAlignment="Center" />
+                    <AppBarButton Foreground="{Binding TextForeground}" Icon="Clock" Label="+1s" FontFamily="Impact" IsCompact="False" Click="SecondGet_Click" HorizontalAlignment="Center"/>
                 </Viewbox>
 
                 <Viewbox Grid.Row="0">
-                    <TextBlock x:Name="addedOneSecondTextBlock" 
-                               Text="+1s"
-                               FontFamily="Impact"
-                               HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                               RenderTransformOrigin=".5,  1"
-                               Visibility="Collapsed">
+                    <TextBlock x:Name="addedOneSecondTextBlock" Foreground="{Binding TextForeground}" Text="+1s" FontFamily="Impact" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin=".5,  1" Visibility="Collapsed">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
                                 <RotateTransform x:Name="RotateTransform" />
@@ -204,15 +130,7 @@
                         </TextBlock.RenderTransform>
                     </TextBlock>
                 </Viewbox>
-                <AppBarButton Name="settings" 
-                      Icon="Setting" 
-                      IsCompact="True" 
-                      Height="50" 
-                      Width="30" 
-                      HorizontalAlignment="left" 
-                      VerticalAlignment="Bottom" 
-                      Grid.Row="1"
-                      Click="settings_Click"/>
+                <AppBarButton Foreground="{Binding TextForeground}" Icon="Setting" IsCompact="True" Height="50" Width="30" HorizontalAlignment="left" VerticalAlignment="Bottom" Grid.Row="1" Click="Settings_Click"/>
             </Grid>
         </SplitView.Content>
     </SplitView>

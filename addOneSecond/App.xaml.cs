@@ -104,12 +104,12 @@ namespace addOneSecond
         {
             // Was the app activated by a voice command?
             
-            if (e.Kind != Windows.ApplicationModel.Activation.ActivationKind.VoiceCommand)
+            if (e.Kind != ActivationKind.VoiceCommand)
             {
                 return;
             }
 
-            var commandArgs = e as Windows.ApplicationModel.Activation.VoiceCommandActivatedEventArgs;
+            var commandArgs = e as VoiceCommandActivatedEventArgs;
 
             var speechRecognitionResult = commandArgs.Result;
             string voiceCommandName = speechRecognitionResult.RulePath[0];
@@ -119,7 +119,7 @@ namespace addOneSecond
 
             if (voiceCommandName == "addOneSecond")
             {
-                page.openAuto();
+                page.OpenAuto();
             }
         }
     }

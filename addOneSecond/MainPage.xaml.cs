@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -25,6 +26,7 @@ using Windows.Media.Playback;
 using Windows.Media.Core;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.VoiceCommands;
+using Windows.System.Display;
 
 namespace addOneSecond
 {
@@ -60,10 +62,11 @@ namespace addOneSecond
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
 
             //加载秒数统计
-            long total;
-            total = await GetTotalSecond();
-            SaveTotalSecond(total);
-            secondTotalShow.Text = $"你已经贡献了{total}秒";
+            Model.Second = await GetTotalSecond();
+        }
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+            SaveTotalSecond(Model.Second);
         }
 
         private async void Timer_Tick(object sender, object e)    //1s定时执行
@@ -72,12 +75,7 @@ namespace addOneSecond
             {
                 PlayAudio();
                 addedOneSecondStoryboard.Begin();  //+1s动画
-                try
-                {
-                    await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));//post用来+1s
-                    SecondAdd();
-                }
-                catch (Exception) { }
+                await SecondAdd();
             }
             try
             {
@@ -87,35 +85,29 @@ namespace addOneSecond
                 secondsShow.Text = span.ToString("d\\:hh\\:mm\\:ss");  //显示结果
             }
             catch (Exception) { }
-            await ShowRealTime();
         }
 
-        private async void secondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
+        private async void SecondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
         {
             PlayAudio();
             addedOneSecondStoryboard.Begin();  //+1s动画
-            try
-            {
-                await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));//post用来+1s
-                SecondAdd();
-            }
-            catch (Exception) { }
+            await SecondAdd();
         }
 
         private void PlayAudio() //播放声音
         {
-            if (MyMediaElement.CurrentState.ToString() != "Playing" && isPlayAudio.IsOn)
+            if (MyMediaElement.CurrentState != MediaElementState.Playing && isPlayAudio.IsOn)
             {
                 MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/" + rankey.Next(1, 10) + ".wav");
             }
         }
 
-        private void settings_Click(object sender, RoutedEventArgs e)  //设置按钮
+        private void Settings_Click(object sender, RoutedEventArgs e)  //设置按钮
         {
             mainSplitView.IsPaneOpen = !mainSplitView.IsPaneOpen;  //开关SplitView设置页
         }
 
-        private void isfullScreen_Toggled(object sender, RoutedEventArgs e)  //全屏按钮
+        private void IsfullScreen_Toggled(object sender, RoutedEventArgs e)  //全屏按钮
         {
             if (isfullScreen.IsOn)
             {
@@ -138,23 +130,19 @@ namespace addOneSecond
             SaveSettings();
         }
 
-        private async void SecondAdd()
+        private async Task SecondAdd()
         {
             try
             {
-                long total;
-                total = await GetTotalSecond();
-                total++;
-                SaveTotalSecond(total);
-                secondTotalShow.Text = $"你已经贡献了{total}秒";
+                await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));
+                Model.Second++;
             }
-            catch { }
+            catch (Exception) { }
         }   //本地计数+1s
 
         private async void SaveTotalSecond(long seconds)
         {
-            StorageFolder folder;
-            folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
+            StorageFolder folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
             try
             {
                 var file_demonstration = await folder.CreateFileAsync("seconds", CreationCollisionOption.ReplaceExisting);
@@ -173,8 +161,7 @@ namespace addOneSecond
 
         private async Task<long> GetTotalSecond()
         {
-            StorageFolder folder;
-            folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
+            StorageFolder folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
 
             var file_demonstration = await folder.CreateFileAsync("seconds", CreationCollisionOption.OpenIfExists);
             //创建文件
@@ -201,8 +188,7 @@ namespace addOneSecond
 
         private async void SaveSettings()    //保存设置
         {
-            StorageFolder folder;
-            folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
+            StorageFolder folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
             try
             {
                 var file_demonstration = await folder.CreateFileAsync("settings", CreationCollisionOption.ReplaceExisting);
@@ -240,8 +226,7 @@ namespace addOneSecond
             BackGroundColorBlueSlider.Value = 255;
 
 
-            StorageFolder folder;
-            folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
+            StorageFolder folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
 
             var file_demonstration = await folder.CreateFileAsync("settings", CreationCollisionOption.OpenIfExists);
             //创建文件
@@ -360,7 +345,7 @@ namespace addOneSecond
             SetForeColor();
         }   //加载设置
 
-        private void isAutoAddOneSecondOpen_Toggled(object sender, RoutedEventArgs e)  //自动+1s开关按键
+        private void IsAutoAddOneSecondOpen_Toggled(object sender, RoutedEventArgs e)  //自动+1s开关按键
         {
             SaveSettings();
         }
@@ -396,17 +381,17 @@ namespace addOneSecond
         }
 
 
-        private async void isTileFresh_Toggled(object sender, RoutedEventArgs e)  //磁贴设置按钮
+        private async void IsTileFresh_Toggled(object sender, RoutedEventArgs e)  //磁贴设置按钮
         {
             if (isTileFresh.IsOn)
             {
-                await setLiveTile();
+                await SetLiveTile();
             }
             SaveSettings();
         }
 
 
-        private async Task setLiveTile()   //开启磁贴
+        private async Task SetLiveTile()   //开启磁贴
         {
             try
             {
@@ -437,15 +422,15 @@ namespace addOneSecond
             updater.StartPeriodicUpdate(tileContent, requestedInterval);
         }
 
-        private Windows.System.Display.DisplayRequest _displayRequest;
+        private DisplayRequest _displayRequest;
 
-        private void isDisplayRequest_Toggled(object sender, RoutedEventArgs e) //常亮按钮
+        private void IsDisplayRequest_Toggled(object sender, RoutedEventArgs e) //常亮按钮
         {
             if (isDisplayRequest.IsOn)
             {
                 //create the request instance if needed
                 if (_displayRequest == null)
-                    _displayRequest = new Windows.System.Display.DisplayRequest();
+                    _displayRequest = new DisplayRequest();
                 //make request to put in active state
                 _displayRequest.RequestActive();
             }
@@ -463,18 +448,18 @@ namespace addOneSecond
 
         private void SetForeColor()  //设置字体颜色
         {
-            SolidColorBrush color = new SolidColorBrush(Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value));
-            secondsShow.Foreground = color;    //应用字体颜色
-            secondGet.Foreground = color;
-            addedOneSecondTextBlock.Foreground = color;
-            settings.Foreground = color;
-            secondTotalShow.Foreground = color;
-            realTime.Foreground = color;
+            //SolidColorBrush color = new SolidColorBrush(Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value));
+            //secondsShow.Foreground = color;    //应用字体颜色
+            //secondGet.Foreground = color;
+            //addedOneSecondTextBlock.Foreground = color;
+            //settings.Foreground = color;
+            //secondTotalShow.Foreground = color;
+            //realTime.Foreground = color;
+            Model.TextForeground = new SolidColorBrush(Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value));
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {
                 StatusBar statusBar = StatusBar.GetForCurrentView();
-                //statusBar.BackgroundColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
                 statusBar.ForegroundColor = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
                 statusBar.BackgroundOpacity = 1;
             }//手机状态栏颜色
@@ -484,52 +469,23 @@ namespace addOneSecond
         {
             try
             {
-                if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.XamlCompositionBrushBase"))
-                {
-                    AcrylicBrush myBrush = new AcrylicBrush();
-                    myBrush.BackgroundSource = AcrylicBackgroundSource.HostBackdrop;
-                    myBrush.TintColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-                    myBrush.FallbackColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-                    myBrush.TintOpacity = BackGroundAcrylicBlueSlider.Value / 100;
+                AcrylicBrush myBrush = new AcrylicBrush();
+                myBrush.BackgroundSource = AcrylicBackgroundSource.HostBackdrop;
+                myBrush.TintColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
+                myBrush.FallbackColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
+                myBrush.TintOpacity = BackGroundAcrylicBlueSlider.Value / 100;
 
-                    mainGrid.Background = myBrush;
-                }
-                else
-                {
-                    SolidColorBrush color = new SolidColorBrush(Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value));
-                    mainGrid.Background = color;    //应用背景颜色
-
-                    if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-                    {
-                        StatusBar statusBar = StatusBar.GetForCurrentView();
-                        statusBar.BackgroundColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-                        //statusBar.ForegroundColor = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
-                        statusBar.BackgroundOpacity = 1;
-                    }//手机状态栏颜色
-                }
+                mainGrid.Background = myBrush;
             }
             catch (Exception) { }
         }
 
-        private async Task ShowRealTime()  //显示被续过的时间
-        {
-            try
-            {
-                long total;
-                total = await GetTotalSecond();
-                DateTime now = DateTime.Now;
-                DateTime timeDeleted = now.AddSeconds(total);
-                realTime.Text = "你的实际时间：" + timeDeleted.ToString("yyyy年MM月dd日 HH:mm:ss");
-            }
-            catch (Exception) { }
-        }
-
-        public void openAuto()  //语音调用的东西
+        public void OpenAuto()  //语音调用的东西
         {
             isAutoAddOneSecondOpen.IsOn = true;
         }
 
-        private async void isPlayAudio_Toggled(object sender, RoutedEventArgs e)   //音效开关按钮
+        private async void IsPlayAudio_Toggled(object sender, RoutedEventArgs e)   //音效开关按钮
         {
             try
             {

@@ -4,7 +4,7 @@
   <mp:PhoneIdentity PhoneProductId="a566d2ec-3a82-45ec-83ad-771a03c8e7dc" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>+1s</DisplayName>
-    <PublisherDisplayName>晨旭</PublisherDisplayName>
+    <PublisherDisplayName>Berrysoft</PublisherDisplayName>
     <Logo>Assets\StoreLogo.scale.png</Logo>
   </Properties>
   <Dependencies>
