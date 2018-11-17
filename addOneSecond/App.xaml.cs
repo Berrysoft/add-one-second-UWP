@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using addOneSecond.Background;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
@@ -84,6 +85,33 @@ namespace addOneSecond
                 await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(storageFile);
             }
             catch (Exception) { }
+
+            await RegisterLiveTileTask();
+        }
+
+        private const string LIVETILETASK = "LIVETILETASK";
+        private async Task RegisterLiveTileTask()
+        {
+            var status = await BackgroundExecutionManager.RequestAccessAsync();
+            if (status == BackgroundAccessStatus.Unspecified || status == BackgroundAccessStatus.DeniedByUser || status == BackgroundAccessStatus.DeniedBySystemPolicy)
+            {
+                return;
+            }
+            foreach (var t in BackgroundTaskRegistration.AllTasks)
+            {
+                if (t.Value.Name == LIVETILETASK)
+                {
+                    t.Value.Unregister(true);
+                }
+            }
+
+            var taskBuilder = new BackgroundTaskBuilder
+            {
+                Name = LIVETILETASK,
+                TaskEntryPoint = typeof(LiveTileTask).FullName
+            };
+            taskBuilder.SetTrigger(new TimeTrigger(30, false));
+            taskBuilder.Register();
         }
 
         /// <summary>

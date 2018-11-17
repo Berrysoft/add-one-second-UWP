@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<tile>
+  <visual branding="nameAndLogo">
+    <binding template="TileMedium">
+      {0}
+      <text>时间众筹总计</text>
+      <text>{1}天</text>
+      <text>{2}小时</text>
+      <text>{3}分钟</text>
+    </binding>
+    <binding template="TileWide">
+      {0}
+      <text>时间众筹总计：{1}天{2}小时{3}分钟</text>
+      <text>长者语录：{4}</text>
+    </binding>
+    <binding template="TileLarge">
+      {0}
+      <text hint-style="title">时间众筹总计：</text>
+      <text hint-style="base">{1}天{2}小时{3}分钟</text>
+      <text hint-wrap="true" hint-style="baseSubtle">长者语录：{4}</text>
+    </binding>
+  </visual>
+</tile>

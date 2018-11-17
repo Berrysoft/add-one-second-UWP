@@ -194,6 +194,12 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\addOneSecond.Background\addOneSecond.Background.csproj">
+      <Project>{e1492d88-265d-4d9e-b8a1-92ae9e8e6169}</Project>
+      <Name>addOneSecond.Background</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
