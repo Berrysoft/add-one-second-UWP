@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -254,13 +253,6 @@ namespace addOneSecond
         {
             Color c = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
             Model.TextForeground = new SolidColorBrush(c);
-            //手机状态栏颜色
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                StatusBar statusBar = StatusBar.GetForCurrentView();
-                statusBar.ForegroundColor = c;
-                statusBar.BackgroundOpacity = 1;
-            }
         }
 
         public void OpenAuto()  //语音调用的东西
