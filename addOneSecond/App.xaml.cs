@@ -110,7 +110,7 @@ namespace addOneSecond
                 Name = LIVETILETASK,
                 TaskEntryPoint = typeof(LiveTileTask).FullName
             };
-            taskBuilder.SetTrigger(new TimeTrigger(30, false));
+            taskBuilder.SetTrigger(new TimeTrigger(15, false));
             taskBuilder.Register();
         }
 
