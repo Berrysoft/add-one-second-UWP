@@ -11,13 +11,13 @@
     <binding template="TileWide">
       {0}
       <text>时间众筹总计：{1}天{2}小时{3}分钟</text>
-      <text>长者语录：{4}</text>
+      <text hint-wrap="true" hint-style="captionSubtle">长者语录：{4}</text>
     </binding>
     <binding template="TileLarge">
       {0}
       <text hint-style="title">时间众筹总计：</text>
       <text hint-style="base">{1}天{2}小时{3}分钟</text>
-      <text hint-wrap="true" hint-style="baseSubtle">长者语录：{4}</text>
+      <text hint-wrap="true" hint-style="bodySubtle">长者语录：{4}</text>
     </binding>
   </visual>
 </tile>

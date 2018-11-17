@@ -22,8 +22,8 @@ namespace addOneSecond.Background
 
         private async Task LoadPoems()
         {
-            poems = await FileIO.ReadLinesAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///poems.txt")));
-            tileT = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///tile.xml")));
+            poems = await FileIO.ReadLinesAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///addOneSecond.Background/poems.txt")));
+            tileT = await FileIO.ReadTextAsync(await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///addOneSecond.Background/tile.xml")));
         }
 
         private static HttpClient client = new HttpClient();
