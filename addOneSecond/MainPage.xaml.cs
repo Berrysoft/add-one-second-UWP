@@ -14,7 +14,6 @@ using Windows.UI;
 using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
-using Windows.ApplicationModel.VoiceCommands;
 
 namespace addOneSecond
 {
@@ -41,14 +40,6 @@ namespace addOneSecond
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;//每秒触发这个事件，以刷新时间
             timer.Start();  //开始计时器
-
-            //加载语音字典
-            try
-            {
-                var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceCommandDictionary.xml"));
-                await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(storageFile);
-            }
-            catch (Exception) { }
 
             //覆盖电脑状态栏
             var titleBar = ApplicationView.GetForCurrentView().TitleBar;
@@ -240,6 +231,8 @@ namespace addOneSecond
                     }
                 }
             }
+            SetBackgroundColor();
+            SetForegroundColor();
         }   //加载设置
 
         private void BackGroundColorSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //背景颜色调节

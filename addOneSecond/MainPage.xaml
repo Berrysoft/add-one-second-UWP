@@ -43,7 +43,7 @@
                     <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
-                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">关闭本软件后，对小娜说 续一秒 即可死机续命（我也不知道为什么会死机啊，明明设置的是打开这个软件，希望懂的人帮忙改改。）本软件运行时，此指令能开启自动+1s功能。</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">关闭本软件后，对小娜说“续一秒”即可打开本软件。本软件运行时，此指令能开启自动+1s功能。</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">背景颜色</TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -107,10 +107,9 @@
                 </Viewbox>
 
                 <Viewbox Grid.Row="0">
-                    <TextBlock x:Name="addedOneSecondTextBlock" Foreground="{Binding TextForeground}" Text="+1s" FontFamily="Impact" HorizontalAlignment="Center" VerticalAlignment="Bottom" RenderTransformOrigin=".5,  1" Visibility="Collapsed">
+                    <TextBlock x:Name="addedOneSecondTextBlock" Foreground="{Binding TextForeground}" Text="+1s" FontFamily="Impact" RenderTransformOrigin=".5,1" Visibility="Collapsed">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
-                                <RotateTransform x:Name="RotateTransform" />
                                 <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
                             </TransformGroup>
                         </TextBlock.RenderTransform>

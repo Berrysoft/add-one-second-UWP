@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
+using Windows.ApplicationModel.VoiceCommands;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -40,7 +42,7 @@ namespace addOneSecond
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -74,6 +76,14 @@ namespace addOneSecond
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
             }
+
+            //加载语音字典
+            try
+            {
+                var storageFile = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///VoiceCommandDictionary.xml"));
+                await VoiceCommandDefinitionManager.InstallCommandDefinitionsFromStorageFileAsync(storageFile);
+            }
+            catch (Exception) { }
         }
 
         /// <summary>
@@ -96,29 +106,39 @@ namespace addOneSecond
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-            //TODO: 保存应用程序状态并停止任何后台活动
+
             MainPage page = (MainPage)((Frame)(Window.Current.Content)).Content;
             await page.SaveSettings();
             await page.SaveTotalSecond();
+
             deferral.Complete();
         }
-        
+
         protected override void OnActivated(IActivatedEventArgs e)
         {
-            // Was the app activated by a voice command?
-            
             if (e.Kind != ActivationKind.VoiceCommand)
             {
                 return;
+            }
+
+            Frame rootFrame = Window.Current.Content as Frame;
+            if (rootFrame == null)
+            {
+                rootFrame = new Frame();
+                Window.Current.Content = rootFrame;
+            }
+            MainPage page = rootFrame.Content as MainPage;
+            if (page == null)
+            {
+                rootFrame.Navigate(typeof(MainPage));
+                Window.Current.Activate();
+                page = rootFrame.Content as MainPage;
             }
 
             var commandArgs = e as VoiceCommandActivatedEventArgs;
 
             var speechRecognitionResult = commandArgs.Result;
             string voiceCommandName = speechRecognitionResult.RulePath[0];
-
-            Frame rootFrame = Window.Current.Content as Frame;
-            MainPage page = rootFrame.Content as MainPage;
 
             if (voiceCommandName == "addOneSecond")
             {
