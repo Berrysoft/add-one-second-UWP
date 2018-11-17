@@ -62,8 +62,6 @@ namespace addOneSecond
         {
             if (Model.AutoAdd)
             {
-                PlayAudio();
-                addedOneSecondStoryboard.Begin();  //+1s动画
                 await SecondAdd();
             }
             try
@@ -78,8 +76,6 @@ namespace addOneSecond
 
         private async void SecondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
         {
-            PlayAudio();
-            addedOneSecondStoryboard.Begin();  //+1s动画
             await SecondAdd();
         }
 
@@ -99,6 +95,8 @@ namespace addOneSecond
         //本地计数+1s
         private async Task SecondAdd()
         {
+            PlayAudio();
+            addedOneSecondStoryboard.Begin();  //+1s动画
             try
             {
                 await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));
@@ -134,23 +132,20 @@ namespace addOneSecond
             var file_demonstration = await folder.CreateFileAsync("seconds", CreationCollisionOption.OpenIfExists);
             //创建文件
 
-            string s;
-
             using (Stream file = await file_demonstration.OpenStreamForReadAsync())
             {
                 using (StreamReader read = new StreamReader(file))
                 {
-                    s = await read.ReadToEndAsync();
+                    string s = await read.ReadToEndAsync();
+                    if (long.TryParse(s, out long seconds))
+                    {
+                        return seconds;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
-            }
-
-            if (long.TryParse(s, out long seconds))
-            {
-                return seconds;
-            }
-            else
-            {
-                return 0;
             }
         }  //获取总秒数
 
@@ -161,7 +156,6 @@ namespace addOneSecond
             {
                 var file_demonstration = await folder.CreateFileAsync("settings", CreationCollisionOption.ReplaceExisting);
                 //创建文件
-
 
                 using (Stream file = await file_demonstration.OpenStreamForWriteAsync())
                 {
@@ -188,81 +182,72 @@ namespace addOneSecond
 
         private async Task GetSettings()
         {
-            BackGroundColorRedSlider.Value = 255;
-            BackGroundColorGreenSlider.Value = 255;
-            BackGroundColorBlueSlider.Value = 255;
-
-
             StorageFolder folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
 
             var file_demonstration = await folder.CreateFileAsync("settings", CreationCollisionOption.OpenIfExists);
             //创建文件
 
-            string s;
-
             using (Stream file = await file_demonstration.OpenStreamForReadAsync())
             {
                 using (StreamReader read = new StreamReader(file))
                 {
-                    s = await read.ReadToEndAsync();
-                }
-            }
-
-
-            if (s.IndexOf(";") >= 1 && s.IndexOf(";") != s.Length - 1)
-            {
-                string[] str2;
-                int count_temp = 0;
-                str2 = s.Split(';');
-                foreach (string i in str2)
-                {
-                    switch (count_temp)
+                    string s = await read.ReadToEndAsync();
+                    if (s.IndexOf(";") >= 1 && s.IndexOf(";") != s.Length - 1)
                     {
-                        case 0:
-                            Model.FullScreen = bool.Parse(i);
-                            break;
-                        case 1:
-                            Model.AutoAdd = bool.Parse(i);
-                            break;
-                        case 2:
-                            BackGroundColorRedSlider.Value = double.Parse(i);
-                            break;
-                        case 3:
-                            BackGroundColorGreenSlider.Value = double.Parse(i);
-                            break;
-                        case 4:
-                            BackGroundColorBlueSlider.Value = double.Parse(i);
-                            break;
-                        case 5:
-                            BackGroundAcrylicOpacitySlider.Value = double.Parse(i);
-                            break;
-                        case 6:
-                            FontColorRedSlider.Value = double.Parse(i);
-                            break;
-                        case 7:
-                            FontColorGreenSlider.Value = double.Parse(i);
-                            break;
-                        case 8:
-                            FontColorBlueSlider.Value = double.Parse(i);
-                            break;
-                        case 9:
-                            Model.DisplayRequest = bool.Parse(i);
-                            break;
-                        case 10:
-                            Model.PlayAudio = bool.Parse(i);
-                            break;
+                        string[] str2;
+                        int count_temp = 0;
+                        str2 = s.Split(';');
+                        foreach (string i in str2)
+                        {
+                            switch (count_temp)
+                            {
+                                case 0:
+                                    Model.FullScreen = bool.Parse(i);
+                                    break;
+                                case 1:
+                                    Model.AutoAdd = bool.Parse(i);
+                                    break;
+                                case 2:
+                                    BackGroundColorRedSlider.Value = double.Parse(i);
+                                    break;
+                                case 3:
+                                    BackGroundColorGreenSlider.Value = double.Parse(i);
+                                    break;
+                                case 4:
+                                    BackGroundColorBlueSlider.Value = double.Parse(i);
+                                    break;
+                                case 5:
+                                    BackGroundAcrylicOpacitySlider.Value = double.Parse(i);
+                                    break;
+                                case 6:
+                                    FontColorRedSlider.Value = double.Parse(i);
+                                    break;
+                                case 7:
+                                    FontColorGreenSlider.Value = double.Parse(i);
+                                    break;
+                                case 8:
+                                    FontColorBlueSlider.Value = double.Parse(i);
+                                    break;
+                                case 9:
+                                    Model.DisplayRequest = bool.Parse(i);
+                                    break;
+                                case 10:
+                                    Model.PlayAudio = bool.Parse(i);
+                                    break;
+                            }
+                            count_temp++;
+                        }
                     }
-                    count_temp++;
                 }
             }
         }   //加载设置
 
         private void BackGroundColorSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //背景颜色调节
         {
-            SetBackGroundColor();
+            SetBackgroundColor();
         }
 
-        private void SetBackGroundColor()  //设置背景颜色
+        private void SetBackgroundColor()
         {
             Model.PageBackgroundColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
             Model.PageBackgroundOpacity = BackGroundAcrylicOpacitySlider.Value / 100;
@@ -270,10 +255,10 @@ namespace addOneSecond
 
         private void FontColorSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //颜色调节
         {
-            SetForeColor();
+            SetForegroundColor();
         }
 
-        private void SetForeColor()  //设置字体颜色
+        private void SetForegroundColor()
         {
             Color c = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
             Model.TextForeground = new SolidColorBrush(c);

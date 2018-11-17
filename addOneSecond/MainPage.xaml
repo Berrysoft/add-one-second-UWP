@@ -37,13 +37,14 @@
         <SplitView.Pane>
             <ScrollViewer>
                 <StackPanel Margin="10" Orientation="Vertical">
-                    <TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="5">设置</TextBlock>
-                    <ToggleSwitch OffContent="全屏已关闭" OnContent="全屏已开启" Margin="5" IsOn="{Binding FullScreen,Mode=TwoWay}"/>
-                    <ToggleSwitch OffContent="自动+1s已关闭" OnContent="自动+1s已开启" Margin="5" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
-                    <ToggleSwitch OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" Margin="5" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
-                    <ToggleSwitch OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" Margin="5" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="5,5,20,5" TextWrapping="Wrap">关闭本软件后，对小娜说 续一秒 即可死机续命（我也不知道为什么会死机啊，明明设置的是打开这个软件，希望懂的人帮忙改改。）本软件运行时，此指令能开启自动+1s功能。</TextBlock>
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="5">背景颜色</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource TitleTextBlockStyle}">设置</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">基础设置</TextBlock>
+                    <ToggleSwitch Margin="10" OffContent="全屏已关闭" OnContent="全屏已开启" IsOn="{Binding FullScreen,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
+                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">关闭本软件后，对小娜说 续一秒 即可死机续命（我也不知道为什么会死机啊，明明设置的是打开这个软件，希望懂的人帮忙改改。）本软件运行时，此指令能开启自动+1s功能。</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">背景颜色</TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -55,16 +56,16 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="0">红</TextBlock>
-                        <Slider Name="BackGroundColorRedSlider"  Grid.Column="1" Grid.Row="0" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="1">绿</TextBlock>
-                        <Slider Name="BackGroundColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="2">蓝</TextBlock>
-                        <Slider Name="BackGroundColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="3">透</TextBlock>
-                        <Slider Name="BackGroundAcrylicOpacitySlider" Grid.Column="1" Grid.Row="3" Maximum="100" Width="220" Margin="2,0,20,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="0">红</TextBlock>
+                        <Slider Name="BackGroundColorRedSlider"  Grid.Column="1" Grid.Row="0" Maximum="255" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="1">绿</TextBlock>
+                        <Slider Name="BackGroundColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="2">蓝</TextBlock>
+                        <Slider Name="BackGroundColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="3">透</TextBlock>
+                        <Slider Name="BackGroundAcrylicOpacitySlider" Grid.Column="1" Grid.Row="3" Maximum="100" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
                     </Grid>
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="5">字体颜色</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">字体颜色</TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
@@ -75,22 +76,22 @@
                             <RowDefinition Height="auto"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="0">红</TextBlock>
-                        <Slider Name="FontColorRedSlider" Grid.Column="1" Grid.Row="0" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorSlider_ValueChanged"/>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="1">绿</TextBlock>
-                        <Slider Name="FontColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorSlider_ValueChanged"/>
-                        <TextBlock Style="{ThemeResource BaseTextBlockStyle}" Margin="5" Grid.Row="2">蓝</TextBlock>
-                        <Slider Name="FontColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Width="220" Margin="2,0,20,0" ValueChanged="FontColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="0">红</TextBlock>
+                        <Slider Name="FontColorRedSlider" Grid.Column="1" Grid.Row="0" Maximum="255" Margin="10,0" ValueChanged="FontColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="1">绿</TextBlock>
+                        <Slider Name="FontColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Margin="10,0" ValueChanged="FontColorSlider_ValueChanged"/>
+                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="2">蓝</TextBlock>
+                        <Slider Name="FontColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Margin="10,0" ValueChanged="FontColorSlider_ValueChanged"/>
                     </Grid>
-                    <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Margin="5">关于</TextBlock>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Margin="5,5,20,5" TextWrapping="Wrap">本软件利用了angry.im提供的api进行处理，并将结果显示在软件中。</TextBlock>
-                    <TextBlock Style="{ThemeResource BodyTextBlockStyle}" IsTextSelectionEnabled="True" Margin="5,5,20,5" TextWrapping="Wrap">感谢https://angry.im/提供的api。</TextBlock>
-                    <HyperlinkButton Margin="5,5,20,5" NavigateUri="https://github.com/Berrysoft/add-one-second-UWP/">项目地址</HyperlinkButton>
+                    <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">关于</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">本软件利用了angry.im提供的api进行处理，并将结果显示在软件中。</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" IsTextSelectionEnabled="True" TextWrapping="Wrap">感谢https://angry.im/提供的api。</TextBlock>
+                    <HyperlinkButton Margin="10" NavigateUri="https://github.com/Berrysoft/add-one-second-UWP/">项目地址</HyperlinkButton>
                 </StackPanel>
             </ScrollViewer>
         </SplitView.Pane>
         <SplitView.Content>
-            <Grid Name="mainGrid">
+            <Grid>
                 <Grid.Background>
                     <AcrylicBrush BackgroundSource="HostBackdrop" TintColor="{Binding PageBackgroundColor}" FallbackColor="{Binding PageBackgroundColor}" TintOpacity="{Binding PageBackgroundOpacity}"/>
                 </Grid.Background>
@@ -98,7 +99,7 @@
                     <RowDefinition Height="5*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <MediaElement Name="MyMediaElement" AutoPlay="True" />
+                <MediaElement Name="MyMediaElement" AutoPlay="True"/>
                 <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
                 <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30"/>
                 <Viewbox Grid.Row="0">
@@ -117,10 +118,10 @@
                 </Viewbox>
                 
                 <Viewbox Grid.Row="1">
-                    <AppBarButton Foreground="{Binding TextForeground}" Icon="Clock" Label="+1s" FontFamily="Impact" IsCompact="False" Click="SecondGet_Click" HorizontalAlignment="Center"/>
+                    <AppBarButton Foreground="{Binding TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1" HorizontalAlignment="Left">
-                    <AppBarButton Foreground="{Binding TextForeground}" Icon="Setting" Label="设置" IsCompact="False" Click="Settings_Click"/>
+                    <AppBarButton Foreground="{Binding TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Setting" Label="设置" Click="Settings_Click"/>
                 </Viewbox>
             </Grid>
         </SplitView.Content>
