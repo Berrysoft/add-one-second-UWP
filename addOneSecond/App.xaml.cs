@@ -137,7 +137,6 @@ namespace addOneSecond
 
             MainPage page = (MainPage)((Frame)(Window.Current.Content)).Content;
             await page.SaveSettings();
-            await page.SaveTotalSecond();
 
             deferral.Complete();
         }
