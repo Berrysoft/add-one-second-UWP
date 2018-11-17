@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation.Metadata;
 using Windows.UI.Xaml;
@@ -14,6 +12,7 @@ using Windows.UI;
 using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
+using Windows.Web.Http;
 
 namespace addOneSecond
 {
@@ -57,7 +56,7 @@ namespace addOneSecond
             }
             try
             {
-                string allSecondsString = await client.GetStringAsync("https://angry.im/l/life");  //获取秒数
+                string allSecondsString = await client.GetStringAsync(new Uri("https://angry.im/l/life"));  //获取秒数
                 long allSeconds = long.Parse(allSecondsString);   //转换成long
                 TimeSpan span = TimeSpan.FromSeconds(allSeconds);
                 secondsShow.Text = span.ToString("d\\:hh\\:mm\\:ss");  //显示结果
@@ -90,7 +89,7 @@ namespace addOneSecond
             addedOneSecondStoryboard.Begin();  //+1s动画
             try
             {
-                await client.PostAsync("https://angry.im/p/life", new StringContent("+1s", Encoding.UTF8, "application/x-www-form-urlencoded"));
+                await client.PostAsync(new Uri("https://angry.im/p/life"), new HttpStringContent("+1s"));
                 Model.Second++;
             }
             catch (Exception) { }
