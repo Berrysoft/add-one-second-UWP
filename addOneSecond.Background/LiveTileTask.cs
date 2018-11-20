@@ -39,7 +39,7 @@ namespace addOneSecond.Background
                 bool isBirthday = date.Month == 8 && date.Day == 17;
                 XmlDocument dom = new XmlDocument();
                 dom.LoadXml(string.Format(tileT,
-                    isBirthday ? "<image src=\"ms-appx:///Birthday.png\" placement=\"background\"/>" : null,
+                    isBirthday ? "<image src=\"ms-appx:///addOneSecond.Background/Birthday.png\" placement=\"background\"/>" : null,
                     span.Days, span.Hours, span.Minutes,
                     poems[rand.Next(poems.Count - 1)]));
                 var notification = new TileNotification(dom);
