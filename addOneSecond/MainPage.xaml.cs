@@ -23,6 +23,7 @@ namespace addOneSecond
     {
         DispatcherTimer timer = new DispatcherTimer();//定义定时器
         Random rankey = new Random();
+        bool voiceAutoAdd = false;
         static HttpClient client = new HttpClient();
 
         public MainPage()
@@ -144,7 +145,7 @@ namespace addOneSecond
                     {
                         Model.Second = (long)json.GetNamedNumber("totalSeconds");
                         Model.FullScreen = json.GetNamedBoolean("fullScreen");
-                        Model.AutoAdd = json.GetNamedBoolean("autoAdd");
+                        Model.AutoAdd = json.GetNamedBoolean("autoAdd") || voiceAutoAdd;
                         Model.DisplayRequest = json.GetNamedBoolean("displayRequest");
                         Model.PlayAudio = json.GetNamedBoolean("playAudio");
                         BackGroundColorRedSlider.Value = json.GetNamedNumber("bkR");
@@ -186,6 +187,7 @@ namespace addOneSecond
         public void OpenAuto()  //语音调用的东西
         {
             Model.AutoAdd = true;
+            voiceAutoAdd = true;
         }
     }
 }

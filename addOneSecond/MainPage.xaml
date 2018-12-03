@@ -43,7 +43,7 @@
                     <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
-                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">关闭本软件后，对小娜说“续一秒”即可打开本软件。本软件运行时，此指令能开启自动+1s功能。</TextBlock>
+                    <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">对小娜说“续一秒”即可打开本软件，并能开启自动+1s功能。</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">背景颜色</TextBlock>
                     <Grid>
                         <Grid.ColumnDefinitions>
