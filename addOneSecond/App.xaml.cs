@@ -135,7 +135,7 @@ namespace addOneSecond
         {
             var deferral = e.SuspendingOperation.GetDeferral();
 
-            MainPage page = (MainPage)((Frame)(Window.Current.Content)).Content;
+            MainPage page = (MainPage)((Frame)Window.Current.Content).Content;
             await page.SaveSettings();
 
             deferral.Complete();
@@ -154,13 +154,8 @@ namespace addOneSecond
                 rootFrame = new Frame();
                 Window.Current.Content = rootFrame;
             }
+            rootFrame.Navigate(typeof(MainPage), e.Kind);
             MainPage page = rootFrame.Content as MainPage;
-            if (page == null)
-            {
-                rootFrame.Navigate(typeof(MainPage));
-                Window.Current.Activate();
-                page = rootFrame.Content as MainPage;
-            }
 
             var commandArgs = e as VoiceCommandActivatedEventArgs;
 
@@ -171,6 +166,8 @@ namespace addOneSecond
             {
                 page.OpenAuto();
             }
+
+            Window.Current.Activate();
         }
     }
 }
