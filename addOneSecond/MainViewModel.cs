@@ -66,6 +66,20 @@ namespace addOneSecond
             set => SetValue(AutoAddProperty, value);
         }
 
+        public static readonly DependencyProperty TileFreshProperty = DependencyProperty.Register(nameof(TileFresh), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, TileFreshProperyChangedCallback));
+        public bool TileFresh
+        {
+            get => (bool)GetValue(TileFreshProperty);
+            set => SetValue(TileFreshProperty, value);
+        }
+        private static async void TileFreshProperyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (await BackgroundHelper.RequestAccessAsync())
+            {
+                BackgroundHelper.RegesterLiveTile((bool)e.NewValue);
+            }
+        }
+
         public static readonly DependencyProperty DisplayRequestProperty = DependencyProperty.Register(nameof(DisplayRequest), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, DisplayRequestPropertyChangedCallback));
         public bool DisplayRequest
         {

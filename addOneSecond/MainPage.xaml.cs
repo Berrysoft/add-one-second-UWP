@@ -108,6 +108,7 @@ namespace addOneSecond
                     ["totalSeconds"] = JsonValue.CreateNumberValue(Model.Second),
                     ["fullScreen"] = JsonValue.CreateBooleanValue(Model.FullScreen),
                     ["autoAdd"] = JsonValue.CreateBooleanValue(Model.AutoAdd),
+                    ["tileRefresh"] = JsonValue.CreateBooleanValue(Model.TileFresh),
                     ["displayRequest"] = JsonValue.CreateBooleanValue(Model.DisplayRequest),
                     ["playAudio"] = JsonValue.CreateBooleanValue(Model.PlayAudio),
                     ["bkR"] = JsonValue.CreateNumberValue(BackGroundColorRedSlider.Value),
@@ -135,28 +136,36 @@ namespace addOneSecond
 
             var file_demonstration = await folder.CreateFileAsync("settings.json", CreationCollisionOption.OpenIfExists);
             //创建文件
-
-            using (Stream file = await file_demonstration.OpenStreamForReadAsync())
+            try
             {
-                using (StreamReader read = new StreamReader(file))
+                using (Stream file = await file_demonstration.OpenStreamForReadAsync())
                 {
-                    string s = await read.ReadToEndAsync();
-                    if (JsonObject.TryParse(s, out JsonObject json))
+                    using (StreamReader read = new StreamReader(file))
                     {
-                        Model.Second = (long)json.GetNamedNumber("totalSeconds");
-                        Model.FullScreen = json.GetNamedBoolean("fullScreen");
-                        Model.AutoAdd = json.GetNamedBoolean("autoAdd") || voiceAutoAdd;
-                        Model.DisplayRequest = json.GetNamedBoolean("displayRequest");
-                        Model.PlayAudio = json.GetNamedBoolean("playAudio");
-                        BackGroundColorRedSlider.Value = json.GetNamedNumber("bkR");
-                        BackGroundColorGreenSlider.Value = json.GetNamedNumber("bkG");
-                        BackGroundColorBlueSlider.Value = json.GetNamedNumber("bkB");
-                        BackGroundAcrylicOpacitySlider.Value = json.GetNamedNumber("bkA");
-                        FontColorRedSlider.Value = json.GetNamedNumber("frR");
-                        FontColorGreenSlider.Value = json.GetNamedNumber("frG");
-                        FontColorBlueSlider.Value = json.GetNamedNumber("frB");
+                        string s = await read.ReadToEndAsync();
+                        if (JsonObject.TryParse(s, out JsonObject json))
+                        {
+                            Model.Second = (long)json.GetNamedNumber("totalSeconds");
+                            Model.FullScreen = json.GetNamedBoolean("fullScreen");
+                            Model.AutoAdd = json.GetNamedBoolean("autoAdd") || voiceAutoAdd;
+                            Model.TileFresh = json.GetNamedBoolean("tileRefresh");
+                            Model.DisplayRequest = json.GetNamedBoolean("displayRequest");
+                            Model.PlayAudio = json.GetNamedBoolean("playAudio");
+                            BackGroundColorRedSlider.Value = json.GetNamedNumber("bkR");
+                            BackGroundColorGreenSlider.Value = json.GetNamedNumber("bkG");
+                            BackGroundColorBlueSlider.Value = json.GetNamedNumber("bkB");
+                            BackGroundAcrylicOpacitySlider.Value = json.GetNamedNumber("bkA");
+                            FontColorRedSlider.Value = json.GetNamedNumber("frR");
+                            FontColorGreenSlider.Value = json.GetNamedNumber("frG");
+                            FontColorBlueSlider.Value = json.GetNamedNumber("frB");
+                        }
                     }
                 }
+            }
+            catch (Exception) { }
+            if (await BackgroundHelper.RequestAccessAsync())
+            {
+                BackgroundHelper.RegesterLiveTile(Model.TileFresh);
             }
             SetBackgroundColor();
             SetForegroundColor();

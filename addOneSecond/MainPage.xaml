@@ -41,6 +41,7 @@
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">基础设置</TextBlock>
                     <ToggleSwitch Margin="10" OffContent="全屏已关闭" OnContent="全屏已开启" IsOn="{Binding FullScreen,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="动态磁贴已关闭" OnContent="动态磁贴已开启" IsOn="{Binding TileFresh,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">对小娜说“续一秒”即可打开本软件，并能开启自动+1s功能。</TextBlock>
