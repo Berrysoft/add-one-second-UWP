@@ -20,11 +20,25 @@ namespace addOneSecond
             set => SetValue(SecondProperty, value);
         }
 
-        public static readonly DependencyProperty TextForegroundProperty = DependencyProperty.Register(nameof(TextForeground), typeof(Brush), typeof(MainViewModel), new PropertyMetadata(new SolidColorBrush(Colors.Black)));
-        public Brush TextForeground
+        public static readonly DependencyProperty TextForegroundColorProperty = DependencyProperty.Register(nameof(TextForegroundColor), typeof(Color), typeof(MainViewModel), new PropertyMetadata(Colors.Black));
+        public Color TextForegroundColor
         {
-            get => (Brush)GetValue(TextForegroundProperty);
-            set => SetValue(TextForegroundProperty, value);
+            get => (Color)GetValue(TextForegroundColorProperty);
+            set => SetValue(TextForegroundColorProperty, value);
+        }
+
+        public static readonly DependencyProperty BackgroundPickerColorProperty = DependencyProperty.Register(nameof(BackgroundPickerColor), typeof(Color), typeof(MainViewModel), new PropertyMetadata(Colors.White, BackgroundPickerColorPropertyChangedCallback));
+        public Color BackgroundPickerColor
+        {
+            get => (Color)GetValue(BackgroundPickerColorProperty);
+            set => SetValue(BackgroundPickerColorProperty, value);
+        }
+        private static void BackgroundPickerColorPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            MainViewModel model = (MainViewModel)d;
+            Color value = (Color)e.NewValue;
+            model.PageBackgroundColor = Color.FromArgb(0xFF, value.R, value.G, value.B);
+            model.PageBackgroundOpacity = value.A / 255.0;
         }
 
         public static readonly DependencyProperty PageBackgroundColorProperty = DependencyProperty.Register(nameof(PageBackgroundColor), typeof(Color), typeof(MainViewModel), new PropertyMetadata(Colors.WhiteSmoke));

@@ -41,7 +41,7 @@ namespace addOneSecond.Background
                 dom.LoadXml(string.Format(tileT,
                     isBirthday ? "<image src=\"ms-appx:///addOneSecond.Background/Birthday.png\" placement=\"peek\"/>" : null,
                     span.Days, span.Hours, span.Minutes,
-                    poems[rand.Next(poems.Count - 1)]));
+                    poems[rand.Next(poems.Count)]));
                 var notification = new TileNotification(dom);
                 notification.ExpirationTime = date.AddMinutes(15);
                 TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);

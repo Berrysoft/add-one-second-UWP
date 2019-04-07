@@ -32,58 +32,24 @@
         </Storyboard>
         <local:SecondToTotalConverter x:Key="SecondToTotal"/>
         <local:SecondToRealTimeConverter x:Key="SecondToRealTime"/>
+        <SolidColorBrush x:Key="TextForeground" Color="{x:Bind Model.TextForegroundColor,Mode=OneWay}"/>
     </Page.Resources>
-    <SplitView Name="mainSplitView" DisplayMode="Overlay" PaneBackground="{ThemeResource SystemControlAcrylicElementBrush}" OpenPaneLength="300">
+    <SplitView Name="mainSplitView" DisplayMode="Overlay" PaneBackground="{ThemeResource SystemControlAcrylicElementBrush}" OpenPaneLength="360">
         <SplitView.Pane>
             <ScrollViewer>
                 <StackPanel Margin="10" Orientation="Vertical">
                     <TextBlock Margin="10" Style="{ThemeResource TitleTextBlockStyle}">设置</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">基础设置</TextBlock>
-                    <ToggleSwitch Margin="10" OffContent="全屏已关闭" OnContent="全屏已开启" IsOn="{Binding FullScreen,Mode=TwoWay}"/>
-                    <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{Binding AutoAdd,Mode=TwoWay}"/>
-                    <ToggleSwitch Margin="10" OffContent="动态磁贴已关闭" OnContent="动态磁贴已开启" IsOn="{Binding TileFresh,Mode=TwoWay}"/>
-                    <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{Binding DisplayRequest,Mode=TwoWay}"/>
-                    <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{Binding PlayAudio,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="全屏已关闭" OnContent="全屏已开启" IsOn="{x:Bind Model.FullScreen,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{x:Bind Model.AutoAdd,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="动态磁贴已关闭" OnContent="动态磁贴已开启" IsOn="{x:Bind Model.TileFresh,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{x:Bind Model.DisplayRequest,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{x:Bind Model.PlayAudio,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">对小娜说“续一秒”即可打开本软件，并能开启自动+1s功能。</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">背景颜色</TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="0">红</TextBlock>
-                        <Slider Name="BackGroundColorRedSlider"  Grid.Column="1" Grid.Row="0" Maximum="255" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="1">绿</TextBlock>
-                        <Slider Name="BackGroundColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="2">蓝</TextBlock>
-                        <Slider Name="BackGroundColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="3">透</TextBlock>
-                        <Slider Name="BackGroundAcrylicOpacitySlider" Grid.Column="1" Grid.Row="3" Maximum="100" Margin="10,0" ValueChanged="BackGroundColorSlider_ValueChanged"/>
-                    </Grid>
+                    <ColorPicker Margin="10" IsAlphaEnabled="True" IsColorChannelTextInputVisible="False" IsAlphaTextInputVisible="False" IsHexInputVisible="False" Color="{Binding BackgroundPickerColor,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">字体颜色</TextBlock>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition Height="auto"/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="0">红</TextBlock>
-                        <Slider Name="FontColorRedSlider" Grid.Column="1" Grid.Row="0" Maximum="255" Margin="10,0" ValueChanged="FontColorSlider_ValueChanged"/>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="1">绿</TextBlock>
-                        <Slider Name="FontColorGreenSlider" Grid.Column="1" Grid.Row="1" Maximum="255" Margin="10,0" ValueChanged="FontColorSlider_ValueChanged"/>
-                        <TextBlock Margin="10" Style="{ThemeResource BaseTextBlockStyle}" VerticalAlignment="Center" Grid.Row="2">蓝</TextBlock>
-                        <Slider Name="FontColorBlueSlider" Grid.Column="1" Grid.Row="2" Maximum="255" Margin="10,0" ValueChanged="FontColorSlider_ValueChanged"/>
-                    </Grid>
+                    <ColorPicker Margin="10" IsColorChannelTextInputVisible="False" IsHexInputVisible="False" Color="{Binding TextForegroundColor,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">关于</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">本软件利用了angry.im提供的api进行处理，并将结果显示在软件中。</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" IsTextSelectionEnabled="True" TextWrapping="Wrap">感谢https://angry.im/提供的api。</TextBlock>
@@ -94,21 +60,21 @@
         <SplitView.Content>
             <Grid>
                 <Grid.Background>
-                    <AcrylicBrush BackgroundSource="HostBackdrop" TintColor="{Binding PageBackgroundColor}" FallbackColor="{Binding PageBackgroundColor}" TintOpacity="{Binding PageBackgroundOpacity}"/>
+                    <AcrylicBrush BackgroundSource="HostBackdrop" TintColor="{x:Bind Model.PageBackgroundColor,Mode=OneWay}" FallbackColor="{x:Bind Model.PageBackgroundColor,Mode=OneWay}" TintOpacity="{x:Bind Model.PageBackgroundOpacity,Mode=OneWay}"/>
                 </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <MediaElement Name="MyMediaElement" AutoPlay="True"/>
-                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
-                <TextBlock Foreground="{Binding TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30"/>
+                <TextBlock Foreground="{StaticResource TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
+                <TextBlock Foreground="{StaticResource TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30"/>
                 <Viewbox Grid.Row="0">
-                    <TextBlock x:Name="secondsShow" Foreground="{Binding TextForeground}" Text="Loading..." HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
+                    <TextBlock x:Name="secondsShow" Foreground="{StaticResource TextForeground}" Text="Loading..." HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
                 </Viewbox>
 
                 <Viewbox Grid.Row="0">
-                    <TextBlock x:Name="addedOneSecondTextBlock" Foreground="{Binding TextForeground}" Text="+1s" FontFamily="Impact" RenderTransformOrigin=".5,1" Visibility="Collapsed">
+                    <TextBlock x:Name="addedOneSecondTextBlock" Foreground="{StaticResource TextForeground}" Text="+1s" FontFamily="Impact" RenderTransformOrigin=".5,1" Visibility="Collapsed">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
@@ -118,10 +84,10 @@
                 </Viewbox>
                 
                 <Viewbox Grid.Row="1">
-                    <AppBarButton Foreground="{Binding TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
+                    <AppBarButton Foreground="{StaticResource TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1" HorizontalAlignment="Left">
-                    <AppBarButton Foreground="{Binding TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Setting" Label="设置" Click="Settings_Click"/>
+                    <AppBarButton Foreground="{StaticResource TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Setting" Label="设置" Click="Settings_Click"/>
                 </Viewbox>
             </Grid>
         </SplitView.Content>

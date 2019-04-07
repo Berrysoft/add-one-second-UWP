@@ -9,7 +9,6 @@ using Windows.Data.Json;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI;
 using Windows.Web.Http;
@@ -111,13 +110,13 @@ namespace addOneSecond
                     ["tileRefresh"] = JsonValue.CreateBooleanValue(Model.TileFresh),
                     ["displayRequest"] = JsonValue.CreateBooleanValue(Model.DisplayRequest),
                     ["playAudio"] = JsonValue.CreateBooleanValue(Model.PlayAudio),
-                    ["bkR"] = JsonValue.CreateNumberValue(BackGroundColorRedSlider.Value),
-                    ["bkG"] = JsonValue.CreateNumberValue(BackGroundColorGreenSlider.Value),
-                    ["bkB"] = JsonValue.CreateNumberValue(BackGroundColorBlueSlider.Value),
-                    ["bkA"] = JsonValue.CreateNumberValue(BackGroundAcrylicOpacitySlider.Value),
-                    ["frR"] = JsonValue.CreateNumberValue(FontColorRedSlider.Value),
-                    ["frG"] = JsonValue.CreateNumberValue(FontColorGreenSlider.Value),
-                    ["frB"] = JsonValue.CreateNumberValue(FontColorBlueSlider.Value)
+                    ["bkR"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.R),
+                    ["bkG"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.G),
+                    ["bkB"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.B),
+                    ["bkA"] = JsonValue.CreateNumberValue(Model.PageBackgroundOpacity),
+                    ["frR"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.R),
+                    ["frG"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.G),
+                    ["frB"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.B)
                 };
                 using (Stream file = await file_demonstration.OpenStreamForWriteAsync())
                 {
@@ -151,13 +150,8 @@ namespace addOneSecond
                             Model.TileFresh = json.GetNamedBoolean("tileRefresh");
                             Model.DisplayRequest = json.GetNamedBoolean("displayRequest");
                             Model.PlayAudio = json.GetNamedBoolean("playAudio");
-                            BackGroundColorRedSlider.Value = json.GetNamedNumber("bkR");
-                            BackGroundColorGreenSlider.Value = json.GetNamedNumber("bkG");
-                            BackGroundColorBlueSlider.Value = json.GetNamedNumber("bkB");
-                            BackGroundAcrylicOpacitySlider.Value = json.GetNamedNumber("bkA");
-                            FontColorRedSlider.Value = json.GetNamedNumber("frR");
-                            FontColorGreenSlider.Value = json.GetNamedNumber("frG");
-                            FontColorBlueSlider.Value = json.GetNamedNumber("frB");
+                            Model.BackgroundPickerColor = Color.FromArgb((byte)(json.GetNamedNumber("bkA") * 255), (byte)json.GetNamedNumber("bkR"), (byte)json.GetNamedNumber("bkG"), (byte)json.GetNamedNumber("bkB"));
+                            Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR"), (byte)json.GetNamedNumber("frG"), (byte)json.GetNamedNumber("frB"));
                         }
                     }
                 }
@@ -167,31 +161,7 @@ namespace addOneSecond
             {
                 BackgroundHelper.RegesterLiveTile(Model.TileFresh);
             }
-            SetBackgroundColor();
-            SetForegroundColor();
         }   //加载设置
-
-        private void BackGroundColorSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //背景颜色调节
-        {
-            SetBackgroundColor();
-        }
-
-        private void SetBackgroundColor()
-        {
-            Model.PageBackgroundColor = Color.FromArgb(255, (byte)BackGroundColorRedSlider.Value, (byte)BackGroundColorGreenSlider.Value, (byte)BackGroundColorBlueSlider.Value);
-            Model.PageBackgroundOpacity = BackGroundAcrylicOpacitySlider.Value / 100;
-        }
-
-        private void FontColorSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)  //颜色调节
-        {
-            SetForegroundColor();
-        }
-
-        private void SetForegroundColor()
-        {
-            Color c = Color.FromArgb(255, (byte)FontColorRedSlider.Value, (byte)FontColorGreenSlider.Value, (byte)FontColorBlueSlider.Value);
-            Model.TextForeground = new SolidColorBrush(c);
-        }
 
         public void OpenAuto()  //语音调用的东西
         {
