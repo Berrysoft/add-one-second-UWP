@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Background;
 using Windows.Data.Xml.Dom;
@@ -47,7 +45,10 @@ namespace addOneSecond.Background
                 TileUpdateManager.CreateTileUpdaterForApplication().Update(notification);
             }
             catch (Exception) { }
-            deferral.Complete();
+            finally
+            {
+                deferral.Complete();
+            }
         }
     }
 }

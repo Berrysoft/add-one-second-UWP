@@ -1,63 +1,36 @@
-﻿using Windows.System.Display;
+﻿using System.ComponentModel;
+using Windows.System.Display;
 using Windows.UI;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
 
 namespace addOneSecond
 {
-    class MainViewModel : DependencyObject
+    class MainViewModel : INotifyPropertyChanged
     {
-        public static readonly DependencyProperty SecondProperty = DependencyProperty.Register(nameof(Second), typeof(long), typeof(MainViewModel), new PropertyMetadata(0L));
-        public long Second
+#pragma warning disable 0067
+        public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore 0067
+
+        public long Second { get; set; }
+
+        public Color TextForegroundColor { get; set; } = Colors.Black;
+
+        public Color BackgroundPickerColor { get; set; } = Colors.White;
+        private void OnBackgroundPickerColorChanged()
         {
-            get => (long)GetValue(SecondProperty);
-            set => SetValue(SecondProperty, value);
+            Color value = BackgroundPickerColor;
+            PageBackgroundColor = Color.FromArgb(0xFF, value.R, value.G, value.B);
+            PageBackgroundOpacity = value.A / 255.0;
         }
 
-        public static readonly DependencyProperty TextForegroundColorProperty = DependencyProperty.Register(nameof(TextForegroundColor), typeof(Color), typeof(MainViewModel), new PropertyMetadata(Colors.Black));
-        public Color TextForegroundColor
-        {
-            get => (Color)GetValue(TextForegroundColorProperty);
-            set => SetValue(TextForegroundColorProperty, value);
-        }
+        public Color PageBackgroundColor { get; set; } = Colors.WhiteSmoke;
 
-        public static readonly DependencyProperty BackgroundPickerColorProperty = DependencyProperty.Register(nameof(BackgroundPickerColor), typeof(Color), typeof(MainViewModel), new PropertyMetadata(Colors.White, BackgroundPickerColorPropertyChangedCallback));
-        public Color BackgroundPickerColor
-        {
-            get => (Color)GetValue(BackgroundPickerColorProperty);
-            set => SetValue(BackgroundPickerColorProperty, value);
-        }
-        private static void BackgroundPickerColorPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            MainViewModel model = (MainViewModel)d;
-            Color value = (Color)e.NewValue;
-            model.PageBackgroundColor = Color.FromArgb(0xFF, value.R, value.G, value.B);
-            model.PageBackgroundOpacity = value.A / 255.0;
-        }
+        public double PageBackgroundOpacity { get; set; } = 1.0;
 
-        public static readonly DependencyProperty PageBackgroundColorProperty = DependencyProperty.Register(nameof(PageBackgroundColor), typeof(Color), typeof(MainViewModel), new PropertyMetadata(Colors.WhiteSmoke));
-        public Color PageBackgroundColor
+        public bool FullScreen { get; set; }
+        private void OnFullScreenChanged()
         {
-            get => (Color)GetValue(PageBackgroundColorProperty);
-            set => SetValue(PageBackgroundColorProperty, value);
-        }
-
-        public static readonly DependencyProperty PageBackgroundOpacityProperty = DependencyProperty.Register(nameof(PageBackgroundOpacity), typeof(double), typeof(MainViewModel), new PropertyMetadata(1.0));
-        public double PageBackgroundOpacity
-        {
-            get => (double)GetValue(PageBackgroundOpacityProperty);
-            set => SetValue(PageBackgroundOpacityProperty, value);
-        }
-
-        public static readonly DependencyProperty FullScreenProperty = DependencyProperty.Register(nameof(FullScreen), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, FullScreenPropertyChangedCallback));
-        public bool FullScreen
-        {
-            get => (bool)GetValue(FullScreenProperty);
-            set => SetValue(FullScreenProperty, value);
-        }
-        private static void FullScreenPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if ((bool)e.NewValue)
+            if (FullScreen)
             {
                 ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
             }
@@ -67,34 +40,18 @@ namespace addOneSecond
             }
         }
 
-        public static readonly DependencyProperty AutoAddProperty = DependencyProperty.Register(nameof(AutoAdd), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false));
-        public bool AutoAdd
+        public bool AutoAdd { get; set; }
+
+        public bool TileFresh { get; set; }
+        private void OnTileFreshChanged()
         {
-            get => (bool)GetValue(AutoAddProperty);
-            set => SetValue(AutoAddProperty, value);
+            BackgroundHelper.RegesterLiveTile(TileFresh);
         }
 
-        public static readonly DependencyProperty TileFreshProperty = DependencyProperty.Register(nameof(TileFresh), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, TileFreshProperyChangedCallback));
-        public bool TileFresh
+        public bool DisplayRequest { get; set; }
+        private void OnDisplayRequestChanged()
         {
-            get => (bool)GetValue(TileFreshProperty);
-            set => SetValue(TileFreshProperty, value);
-        }
-        private static void TileFreshProperyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            BackgroundHelper.RegesterLiveTile((bool)e.NewValue);
-        }
-
-        public static readonly DependencyProperty DisplayRequestProperty = DependencyProperty.Register(nameof(DisplayRequest), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, DisplayRequestPropertyChangedCallback));
-        public bool DisplayRequest
-        {
-            get => (bool)GetValue(DisplayRequestProperty);
-            set => SetValue(DisplayRequestProperty, value);
-        }
-        private static void DisplayRequestPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            MainViewModel model = (MainViewModel)d;
-            model.SetDisplay((bool)e.NewValue);
+            SetDisplay(DisplayRequest);
         }
         private DisplayRequest _displayRequest;
         private void SetDisplay(bool request)
@@ -118,18 +75,12 @@ namespace addOneSecond
         }
 
 
-        public static readonly DependencyProperty PlayAudioProperty = DependencyProperty.Register(nameof(PlayAudio), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, PlayAudioPropertyChangedCallback));
-        public bool PlayAudio
+        public bool PlayAudio { get; set; }
+        private void OnPlayAudioChanged()
         {
-            get => (bool)GetValue(PlayAudioProperty);
-            set => SetValue(PlayAudioProperty, value);
-        }
-        private static void PlayAudioPropertyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            MainViewModel model = (MainViewModel)d;
-            if ((bool)e.NewValue && model.Second < 2333)
+            if (PlayAudio && Second < 2333)
             {
-                model.PlayAudio = false;
+                PlayAudio = false;
             }
         }
     }
