@@ -84,10 +84,10 @@
                 </Viewbox>
                 
                 <Viewbox Grid.Row="1">
-                    <AppBarButton Foreground="{StaticResource TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
+                    <AppBarButton Foreground="{StaticResource TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1" HorizontalAlignment="Left">
-                    <AppBarButton Foreground="{StaticResource TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Margin="0,0,0,-9" Icon="Setting" Label="设置" Click="Settings_Click"/>
+                    <AppBarButton Foreground="{StaticResource TextForeground}" Style="{ThemeResource AppBarButtonRevealStyle}" Icon="Setting" Label="设置" Click="Settings_Click"/>
                 </Viewbox>
             </Grid>
         </SplitView.Content>

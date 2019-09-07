@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
 using Windows.ApplicationModel.Core;
 using Windows.Data.Json;
+using Windows.Storage;
+using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI;
 using Windows.Web.Http;
 
 namespace addOneSecond
@@ -157,10 +155,7 @@ namespace addOneSecond
                 }
             }
             catch (Exception) { }
-            if (await BackgroundHelper.RequestAccessAsync())
-            {
-                BackgroundHelper.RegesterLiveTile(Model.TileFresh);
-            }
+            BackgroundHelper.RegesterLiveTile(Model.TileFresh);
         }   //加载设置
 
         public void OpenAuto()  //语音调用的东西

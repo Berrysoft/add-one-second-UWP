@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Windows.System.Display;
+﻿using Windows.System.Display;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Media;
 
 namespace addOneSecond
 {
@@ -86,12 +80,9 @@ namespace addOneSecond
             get => (bool)GetValue(TileFreshProperty);
             set => SetValue(TileFreshProperty, value);
         }
-        private static async void TileFreshProperyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void TileFreshProperyChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (await BackgroundHelper.RequestAccessAsync())
-            {
-                BackgroundHelper.RegesterLiveTile((bool)e.NewValue);
-            }
+            BackgroundHelper.RegesterLiveTile((bool)e.NewValue);
         }
 
         public static readonly DependencyProperty DisplayRequestProperty = DependencyProperty.Register(nameof(DisplayRequest), typeof(bool), typeof(MainViewModel), new PropertyMetadata(false, DisplayRequestPropertyChangedCallback));

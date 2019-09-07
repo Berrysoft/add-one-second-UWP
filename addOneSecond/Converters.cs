@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Data;
 
 namespace addOneSecond
@@ -11,11 +7,7 @@ namespace addOneSecond
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (long.TryParse(value.ToString(), out long total))
-            {
-                return $"你已经贡献了{total}秒";
-            }
-            return null;
+            return $"你已经贡献了{value}秒";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
@@ -28,12 +20,8 @@ namespace addOneSecond
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (long.TryParse(value.ToString(), out long total))
-            {
-                DateTime realTime = DateTime.Now.AddSeconds(total);
-                return "你的实际时间：" + realTime.ToString("yyyy年MM月dd日 HH:mm:ss");
-            }
-            return null;
+            DateTime realTime = DateTime.Now.AddSeconds((long)value);
+            return "你的实际时间：" + realTime.ToString("yyyy年MM月dd日 HH:mm:ss");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
