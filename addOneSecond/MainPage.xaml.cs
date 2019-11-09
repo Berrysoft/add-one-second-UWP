@@ -1,21 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.Core;
 using Windows.Data.Json;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media;
 using Windows.Web.Http;
 
 namespace addOneSecond
 {
-    /// <summary>
-    /// 可用于自身或导航至 Frame 内部的空白页。
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         DispatcherTimer timer = new DispatcherTimer();//定义定时器
@@ -68,10 +64,10 @@ namespace addOneSecond
 
         private void PlayAudio() //播放声音
         {
-            if (MyMediaElement.CurrentState != MediaElementState.Playing && Model.PlayAudio)
-            {
-                MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/" + rankey.Next(1, 10) + ".wav");
-            }
+            //if (MyMediaElement.CurrentState != MediaElementState.Playing && Model.PlayAudio)
+            //{
+            //    MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/" + rankey.Next(1, 10) + ".wav");
+            //}
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)  //设置按钮

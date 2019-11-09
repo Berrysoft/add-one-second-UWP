@@ -1,36 +1,65 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Microsoft.UI;
+using Microsoft.UI.Xaml.Data;
 using Windows.System.Display;
-using Windows.UI;
 using Windows.UI.ViewManagement;
+using Color = Windows.UI.Color;
 
 namespace addOneSecond
 {
     class MainViewModel : INotifyPropertyChanged
     {
-#pragma warning disable 0067
         public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore 0067
 
-        public long Second { get; set; }
+        private void SetValue<T>(ref T target, T value, Action onChanged = null, [CallerMemberName] string name = null, params string[] names)
+        {
+            if (!EqualityComparer<T>.Default.Equals(target, value))
+            {
+                target = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+                foreach (var n in names)
+                {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(n));
+                }
+                onChanged?.Invoke();
+            }
+        }
+
+        private long second;
+        public long Second
+        {
+            get => second;
+            set => SetValue(ref second, value, null, nameof(Second), nameof(RealTime));
+        }
 
         public DateTime RealTime => DateTime.Now.AddSeconds(Second);
 
-        public Color TextForegroundColor { get; set; } = Colors.Black;
-
-        public Color BackgroundPickerColor { get; set; } = Colors.White;
-        private void OnBackgroundPickerColorChanged()
+        private Color textForegroundColor = Colors.Black;
+        public Color TextForegroundColor
         {
-            Color value = BackgroundPickerColor;
-            PageBackgroundColor = Color.FromArgb(0xFF, value.R, value.G, value.B);
-            PageBackgroundOpacity = value.A / 255.0;
+            get => textForegroundColor;
+            set => SetValue(ref textForegroundColor, value);
         }
 
-        public Color PageBackgroundColor { get; set; } = Colors.WhiteSmoke;
+        private Color backgroundPickerColor = Colors.White;
+        public Color BackgroundPickerColor
+        {
+            get => backgroundPickerColor;
+            set => SetValue(ref backgroundPickerColor, value, null, nameof(BackgroundPickerColor), nameof(PageBackgroundColor), nameof(PageBackgroundOpacity));
+        }
 
-        public double PageBackgroundOpacity { get; set; } = 1.0;
+        public Color PageBackgroundColor => Color.FromArgb(0xFF, BackgroundPickerColor.R, BackgroundPickerColor.G, BackgroundPickerColor.B);
 
-        public bool FullScreen { get; set; }
+        public double PageBackgroundOpacity => BackgroundPickerColor.A / 255.0;
+
+        private bool fullScreen;
+        public bool FullScreen
+        {
+            get => fullScreen;
+            set => SetValue(ref fullScreen, value, OnFullScreenChanged);
+        }
         private void OnFullScreenChanged()
         {
             if (FullScreen)
@@ -43,15 +72,30 @@ namespace addOneSecond
             }
         }
 
-        public bool AutoAdd { get; set; }
+        private bool autoAdd;
+        public bool AutoAdd
+        {
+            get => autoAdd;
+            set => SetValue(ref autoAdd, value);
+        }
 
-        public bool TileFresh { get; set; }
+        private bool tileFresh;
+        public bool TileFresh
+        {
+            get => tileFresh;
+            set => SetValue(ref tileFresh, value, OnTileFreshChanged);
+        }
         private void OnTileFreshChanged()
         {
             BackgroundHelper.RegesterLiveTile(TileFresh);
         }
 
-        public bool DisplayRequest { get; set; }
+        private bool displayRequest;
+        public bool DisplayRequest
+        {
+            get => displayRequest;
+            set => SetValue(ref displayRequest, value, OnDisplayRequestChanged);
+        }
         private void OnDisplayRequestChanged()
         {
             SetDisplay(DisplayRequest);
@@ -77,8 +121,12 @@ namespace addOneSecond
             }
         }
 
-
-        public bool PlayAudio { get; set; }
+        private bool playAudio;
+        public bool PlayAudio
+        {
+            get => playAudio;
+            set => SetValue(ref playAudio, value, OnPlayAudioChanged);
+        }
         private void OnPlayAudioChanged()
         {
             if (PlayAudio && Second < 2333)
