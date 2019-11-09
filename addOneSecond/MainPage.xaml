@@ -5,6 +5,7 @@
     xmlns:local="using:addOneSecond"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
     Loaded="Page_Loaded">
     <Page.DataContext>
@@ -30,13 +31,11 @@
                 <DiscreteObjectKeyFrame Value="Collapsed" KeyTime="0:0:0.2" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
-        <local:SecondToTotalConverter x:Key="SecondToTotal"/>
-        <local:SecondToRealTimeConverter x:Key="SecondToRealTime"/>
         <SolidColorBrush x:Key="TextForeground" Color="{x:Bind Model.TextForegroundColor,Mode=OneWay}"/>
     </Page.Resources>
     <SplitView Name="mainSplitView" DisplayMode="Overlay" PaneBackground="{ThemeResource SystemControlAcrylicElementBrush}" OpenPaneLength="360">
         <SplitView.Pane>
-            <ScrollViewer>
+            <muxc:ScrollViewer>
                 <StackPanel Margin="10" Orientation="Vertical">
                     <TextBlock Margin="10" Style="{ThemeResource TitleTextBlockStyle}">设置</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">基础设置</TextBlock>
@@ -47,15 +46,15 @@
                     <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{x:Bind Model.PlayAudio,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">对小娜说“续一秒”即可打开本软件，并能开启自动+1s功能。</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">背景颜色</TextBlock>
-                    <ColorPicker Margin="10" IsAlphaEnabled="True" IsColorChannelTextInputVisible="False" IsAlphaTextInputVisible="False" IsHexInputVisible="False" Color="{Binding BackgroundPickerColor,Mode=TwoWay}"/>
+                    <muxc:ColorPicker Margin="10" IsAlphaEnabled="True" IsColorChannelTextInputVisible="False" IsAlphaTextInputVisible="False" IsHexInputVisible="False" Color="{x:Bind Model.BackgroundPickerColor,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">字体颜色</TextBlock>
-                    <ColorPicker Margin="10" IsColorChannelTextInputVisible="False" IsHexInputVisible="False" Color="{Binding TextForegroundColor,Mode=TwoWay}"/>
+                    <muxc:ColorPicker Margin="10" IsColorChannelTextInputVisible="False" IsHexInputVisible="False" Color="{x:Bind Model.TextForegroundColor,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">关于</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">本软件利用了angry.im提供的api进行处理，并将结果显示在软件中。</TextBlock>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" IsTextSelectionEnabled="True" TextWrapping="Wrap">感谢https://angry.im/提供的api。</TextBlock>
                     <HyperlinkButton Margin="10" NavigateUri="https://github.com/Berrysoft/add-one-second-UWP/">项目地址</HyperlinkButton>
                 </StackPanel>
-            </ScrollViewer>
+            </muxc:ScrollViewer>
         </SplitView.Pane>
         <SplitView.Content>
             <Grid>
@@ -67,8 +66,15 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <MediaElement Name="MyMediaElement" AutoPlay="True"/>
-                <TextBlock Foreground="{StaticResource TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToTotal}}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10"/>
-                <TextBlock Foreground="{StaticResource TextForeground}" Text="{Binding Second,Converter={StaticResource SecondToRealTime}}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30"/>
+                <TextBlock Foreground="{StaticResource TextForeground}" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
+                    你已经贡献了
+                    <Run Text="{x:Bind Model.Second,Mode=OneWay}"/>
+                    秒
+                </TextBlock>
+                <TextBlock Foreground="{StaticResource TextForeground}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30">
+                    你的实际时间：
+                    <Run Text="{x:Bind Model.RealTime,Mode=OneWay}"/>
+                </TextBlock>
                 <Viewbox Grid.Row="0">
                     <TextBlock x:Name="secondsShow" Foreground="{StaticResource TextForeground}" Text="Loading..." HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
                 </Viewbox>

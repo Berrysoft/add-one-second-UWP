@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Windows.System.Display;
 using Windows.UI;
 using Windows.UI.ViewManagement;
@@ -12,6 +13,8 @@ namespace addOneSecond
 #pragma warning restore 0067
 
         public long Second { get; set; }
+
+        public DateTime RealTime => DateTime.Now.AddSeconds(Second);
 
         public Color TextForegroundColor { get; set; } = Colors.Black;
 
