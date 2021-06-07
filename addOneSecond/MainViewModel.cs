@@ -16,6 +16,8 @@ namespace addOneSecond
 
         public DateTime RealTime => DateTime.Now.AddSeconds(Second);
 
+        public TimeSpan TotalTime => TimeSpan.FromSeconds(Second);
+
         public Color TextForegroundColor { get; set; } = Colors.Black;
 
         public Color BackgroundPickerColor { get; set; } = Colors.White;

@@ -9,7 +9,6 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.Web.Http;
 
 namespace addOneSecond
 {
@@ -18,10 +17,9 @@ namespace addOneSecond
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        DispatcherTimer timer = new DispatcherTimer();//定义定时器
-        Random rankey = new Random();
+        readonly DispatcherTimer timer = new DispatcherTimer();//定义定时器
+        readonly Random rankey = new Random();
         bool voiceAutoAdd = false;
-        static HttpClient client = new HttpClient();
 
         public MainPage()
         {
@@ -44,26 +42,17 @@ namespace addOneSecond
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
         }
 
-        private async void Timer_Tick(object sender, object e)    //1s定时执行
+        private void Timer_Tick(object sender, object e)    //1s定时执行
         {
-            Task addt = null;
             if (Model.AutoAdd)
-                addt = SecondAdd();
-            try
             {
-                string allSecondsString = await client.GetStringAsync(new Uri("https://angry.im/l/life"));  //获取秒数
-                long allSeconds = long.Parse(allSecondsString);   //转换成long
-                TimeSpan span = TimeSpan.FromSeconds(allSeconds);
-                secondsShow.Text = span.ToString("d\\:hh\\:mm\\:ss");  //显示结果
+                SecondAdd();
             }
-            catch (Exception) { }
-            if (addt != null)
-                await addt;
         }
 
-        private async void SecondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
+        private void SecondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
         {
-            await SecondAdd();
+            SecondAdd();
         }
 
         private void PlayAudio() //播放声音
@@ -80,15 +69,10 @@ namespace addOneSecond
         }
 
         //本地计数+1s
-        private async Task SecondAdd()
+        private void SecondAdd()
         {
-            try
-            {
-                await client.PostAsync(new Uri("https://angry.im/p/life"), new HttpStringContent("+1s"));
-                Model.Second++;
-            }
-            catch (Exception) { }
-            addedOneSecondStoryboard.Begin();  //+1s动画
+            Model.Second++;
+            addedOneSecondStoryboard.Begin();
             PlayAudio();
         }
 
@@ -142,14 +126,14 @@ namespace addOneSecond
                         string s = await read.ReadToEndAsync();
                         if (JsonObject.TryParse(s, out JsonObject json))
                         {
-                            Model.Second = (long)json.GetNamedNumber("totalSeconds");
-                            Model.FullScreen = json.GetNamedBoolean("fullScreen");
-                            Model.AutoAdd = json.GetNamedBoolean("autoAdd") || voiceAutoAdd;
-                            Model.TileFresh = json.GetNamedBoolean("tileRefresh");
-                            Model.DisplayRequest = json.GetNamedBoolean("displayRequest");
-                            Model.PlayAudio = json.GetNamedBoolean("playAudio");
-                            Model.BackgroundPickerColor = Color.FromArgb((byte)(json.GetNamedNumber("bkA") * 255), (byte)json.GetNamedNumber("bkR"), (byte)json.GetNamedNumber("bkG"), (byte)json.GetNamedNumber("bkB"));
-                            Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR"), (byte)json.GetNamedNumber("frG"), (byte)json.GetNamedNumber("frB"));
+                            Model.Second = (long)json.GetNamedNumber("totalSeconds", 0);
+                            Model.FullScreen = json.GetNamedBoolean("fullScreen", false);
+                            Model.AutoAdd = json.GetNamedBoolean("autoAdd", false) || voiceAutoAdd;
+                            Model.TileFresh = json.GetNamedBoolean("tileRefresh", true);
+                            Model.DisplayRequest = json.GetNamedBoolean("displayRequest", false);
+                            Model.PlayAudio = json.GetNamedBoolean("playAudio", false);
+                            Model.BackgroundPickerColor = Color.FromArgb((byte)(json.GetNamedNumber("bkA", 1) * 255), (byte)json.GetNamedNumber("bkR", 255), (byte)json.GetNamedNumber("bkG", 255), (byte)json.GetNamedNumber("bkB", 255));
+                            Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR", 0), (byte)json.GetNamedNumber("frG", 0), (byte)json.GetNamedNumber("frB", 0));
                         }
                     }
                 }
