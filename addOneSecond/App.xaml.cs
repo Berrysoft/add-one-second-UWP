@@ -1,22 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.VoiceCommands;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
-using Windows.UI.Notifications;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace addOneSecond
@@ -32,7 +20,7 @@ namespace addOneSecond
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
             this.Suspending += OnSuspending;
         }
 
@@ -105,11 +93,15 @@ namespace addOneSecond
         private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
-
-            MainPage page = (MainPage)((Frame)Window.Current.Content).Content;
-            await page.SaveSettings();
-
-            deferral.Complete();
+            try
+            {
+                MainPage page = (MainPage)((Frame)Window.Current.Content).Content;
+                await page.SaveSettings();
+            }
+            finally
+            {
+                deferral.Complete();
+            }
         }
 
         protected override void OnActivated(IActivatedEventArgs e)

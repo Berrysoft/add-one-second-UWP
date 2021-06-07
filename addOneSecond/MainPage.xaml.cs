@@ -79,36 +79,32 @@ namespace addOneSecond
         internal async Task SaveSettings()    //保存设置
         {
             StorageFolder folder = ApplicationData.Current.RoamingFolder; //获取应用目录的文件夹
-            try
-            {
-                var file_demonstration = await folder.CreateFileAsync("settings.json", CreationCollisionOption.ReplaceExisting);
-                //创建文件
+            var file_demonstration = await folder.CreateFileAsync("settings.json", CreationCollisionOption.ReplaceExisting);
+            //创建文件
 
-                JsonObject json = new JsonObject()
+            JsonObject json = new JsonObject()
+            {
+                ["totalSeconds"] = JsonValue.CreateNumberValue(Model.Second),
+                ["fullScreen"] = JsonValue.CreateBooleanValue(Model.FullScreen),
+                ["autoAdd"] = JsonValue.CreateBooleanValue(Model.AutoAdd),
+                ["tileRefresh"] = JsonValue.CreateBooleanValue(Model.TileFresh),
+                ["displayRequest"] = JsonValue.CreateBooleanValue(Model.DisplayRequest),
+                ["playAudio"] = JsonValue.CreateBooleanValue(Model.PlayAudio),
+                ["bkR"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.R),
+                ["bkG"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.G),
+                ["bkB"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.B),
+                ["bkA"] = JsonValue.CreateNumberValue(Model.PageBackgroundOpacity),
+                ["frR"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.R),
+                ["frG"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.G),
+                ["frB"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.B)
+            };
+            using (Stream file = await file_demonstration.OpenStreamForWriteAsync())
+            {
+                using (StreamWriter write = new StreamWriter(file))
                 {
-                    ["totalSeconds"] = JsonValue.CreateNumberValue(Model.Second),
-                    ["fullScreen"] = JsonValue.CreateBooleanValue(Model.FullScreen),
-                    ["autoAdd"] = JsonValue.CreateBooleanValue(Model.AutoAdd),
-                    ["tileRefresh"] = JsonValue.CreateBooleanValue(Model.TileFresh),
-                    ["displayRequest"] = JsonValue.CreateBooleanValue(Model.DisplayRequest),
-                    ["playAudio"] = JsonValue.CreateBooleanValue(Model.PlayAudio),
-                    ["bkR"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.R),
-                    ["bkG"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.G),
-                    ["bkB"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.B),
-                    ["bkA"] = JsonValue.CreateNumberValue(Model.PageBackgroundOpacity),
-                    ["frR"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.R),
-                    ["frG"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.G),
-                    ["frB"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.B)
-                };
-                using (Stream file = await file_demonstration.OpenStreamForWriteAsync())
-                {
-                    using (StreamWriter write = new StreamWriter(file))
-                    {
-                        await write.WriteAsync(json.ToString());
-                    }
+                    await write.WriteAsync(json.ToString());
                 }
             }
-            catch (Exception) { }
         }
 
         private async Task GetSettings()
@@ -117,28 +113,24 @@ namespace addOneSecond
 
             var file_demonstration = await folder.CreateFileAsync("settings.json", CreationCollisionOption.OpenIfExists);
             //创建文件
-            try
+            using (Stream file = await file_demonstration.OpenStreamForReadAsync())
             {
-                using (Stream file = await file_demonstration.OpenStreamForReadAsync())
+                using (StreamReader read = new StreamReader(file))
                 {
-                    using (StreamReader read = new StreamReader(file))
+                    string s = await read.ReadToEndAsync();
+                    if (JsonObject.TryParse(s, out JsonObject json))
                     {
-                        string s = await read.ReadToEndAsync();
-                        if (JsonObject.TryParse(s, out JsonObject json))
-                        {
-                            Model.Second = (long)json.GetNamedNumber("totalSeconds", 0);
-                            Model.FullScreen = json.GetNamedBoolean("fullScreen", false);
-                            Model.AutoAdd = json.GetNamedBoolean("autoAdd", false) || voiceAutoAdd;
-                            Model.TileFresh = json.GetNamedBoolean("tileRefresh", true);
-                            Model.DisplayRequest = json.GetNamedBoolean("displayRequest", false);
-                            Model.PlayAudio = json.GetNamedBoolean("playAudio", false);
-                            Model.BackgroundPickerColor = Color.FromArgb((byte)(json.GetNamedNumber("bkA", 1) * 255), (byte)json.GetNamedNumber("bkR", 255), (byte)json.GetNamedNumber("bkG", 255), (byte)json.GetNamedNumber("bkB", 255));
-                            Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR", 0), (byte)json.GetNamedNumber("frG", 0), (byte)json.GetNamedNumber("frB", 0));
-                        }
+                        Model.Second = (long)json.GetNamedNumber("totalSeconds", 0);
+                        Model.FullScreen = json.GetNamedBoolean("fullScreen", false);
+                        Model.AutoAdd = json.GetNamedBoolean("autoAdd", false) || voiceAutoAdd;
+                        Model.TileFresh = json.GetNamedBoolean("tileRefresh", true);
+                        Model.DisplayRequest = json.GetNamedBoolean("displayRequest", false);
+                        Model.PlayAudio = json.GetNamedBoolean("playAudio", false);
+                        Model.BackgroundPickerColor = Color.FromArgb((byte)(json.GetNamedNumber("bkA", 1) * 255), (byte)json.GetNamedNumber("bkR", 255), (byte)json.GetNamedNumber("bkG", 255), (byte)json.GetNamedNumber("bkB", 255));
+                        Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR", 0), (byte)json.GetNamedNumber("frG", 0), (byte)json.GetNamedNumber("frB", 0));
                     }
                 }
             }
-            catch (Exception) { }
             BackgroundHelper.RegesterLiveTile(Model.TileFresh);
         }   //加载设置
 
