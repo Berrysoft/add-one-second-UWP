@@ -90,10 +90,6 @@ namespace addOneSecond
                 ["tileRefresh"] = JsonValue.CreateBooleanValue(Model.TileFresh),
                 ["displayRequest"] = JsonValue.CreateBooleanValue(Model.DisplayRequest),
                 ["playAudio"] = JsonValue.CreateBooleanValue(Model.PlayAudio),
-                ["bkR"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.R),
-                ["bkG"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.G),
-                ["bkB"] = JsonValue.CreateNumberValue(Model.PageBackgroundColor.B),
-                ["bkA"] = JsonValue.CreateNumberValue(Model.PageBackgroundOpacity),
                 ["frR"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.R),
                 ["frG"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.G),
                 ["frB"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.B)
@@ -126,7 +122,6 @@ namespace addOneSecond
                         Model.TileFresh = json.GetNamedBoolean("tileRefresh", true);
                         Model.DisplayRequest = json.GetNamedBoolean("displayRequest", false);
                         Model.PlayAudio = json.GetNamedBoolean("playAudio", false);
-                        Model.BackgroundPickerColor = Color.FromArgb((byte)(json.GetNamedNumber("bkA", 1) * 255), (byte)json.GetNamedNumber("bkR", 255), (byte)json.GetNamedNumber("bkG", 255), (byte)json.GetNamedNumber("bkB", 255));
                         Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR", 0), (byte)json.GetNamedNumber("frG", 0), (byte)json.GetNamedNumber("frB", 0));
                     }
                 }

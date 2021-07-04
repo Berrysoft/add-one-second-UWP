@@ -20,18 +20,6 @@ namespace addOneSecond
 
         public Color TextForegroundColor { get; set; } = Colors.Black;
 
-        public Color BackgroundPickerColor { get; set; } = Colors.White;
-        private void OnBackgroundPickerColorChanged()
-        {
-            Color value = BackgroundPickerColor;
-            PageBackgroundColor = Color.FromArgb(0xFF, value.R, value.G, value.B);
-            PageBackgroundOpacity = value.A / 255.0;
-        }
-
-        public Color PageBackgroundColor { get; set; } = Colors.WhiteSmoke;
-
-        public double PageBackgroundOpacity { get; set; } = 1.0;
-
         public bool FullScreen { get; set; }
         private void OnFullScreenChanged()
         {
