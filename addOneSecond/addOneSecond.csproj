@@ -21,7 +21,6 @@
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
-    <PackageCertificateThumbprint>270417B585D8B8DF7ACE73F4830406C00055A578</PackageCertificateThumbprint>
     <PackageCertificateKeyFile>addOneSecond_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
