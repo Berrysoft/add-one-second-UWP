@@ -90,9 +90,6 @@ namespace addOneSecond
                 ["tileRefresh"] = JsonValue.CreateBooleanValue(Model.TileFresh),
                 ["displayRequest"] = JsonValue.CreateBooleanValue(Model.DisplayRequest),
                 ["playAudio"] = JsonValue.CreateBooleanValue(Model.PlayAudio),
-                ["frR"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.R),
-                ["frG"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.G),
-                ["frB"] = JsonValue.CreateNumberValue(Model.TextForegroundColor.B)
             };
             using (Stream file = await file_demonstration.OpenStreamForWriteAsync())
             {
@@ -122,7 +119,6 @@ namespace addOneSecond
                         Model.TileFresh = json.GetNamedBoolean("tileRefresh", true);
                         Model.DisplayRequest = json.GetNamedBoolean("displayRequest", false);
                         Model.PlayAudio = json.GetNamedBoolean("playAudio", false);
-                        Model.TextForegroundColor = Color.FromArgb(0xFF, (byte)json.GetNamedNumber("frR", 0), (byte)json.GetNamedNumber("frG", 0), (byte)json.GetNamedNumber("frB", 0));
                     }
                 }
             }

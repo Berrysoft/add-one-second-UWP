@@ -31,7 +31,6 @@
                 <DiscreteObjectKeyFrame Value="Collapsed" KeyTime="0:0:0.2" />
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
-        <SolidColorBrush x:Key="TextForeground" Color="{x:Bind Model.TextForegroundColor,Mode=OneWay}"/>
     </Page.Resources>
     <SplitView Name="mainSplitView" DisplayMode="Overlay" OpenPaneLength="360">
         <SplitView.Pane>
@@ -43,10 +42,16 @@
                     <ToggleSwitch Margin="10" OffContent="自动+1s已关闭" OnContent="自动+1s已开启" IsOn="{x:Bind Model.AutoAdd,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="动态磁贴已关闭" OnContent="动态磁贴已开启" IsOn="{x:Bind Model.TileFresh,Mode=TwoWay}"/>
                     <ToggleSwitch Margin="10" OffContent="屏幕常亮已关闭" OnContent="屏幕常亮已开启" IsOn="{x:Bind Model.DisplayRequest,Mode=TwoWay}"/>
-                    <ToggleSwitch Margin="10" OffContent="音效已关闭（贡献2333秒才能开）" OnContent="音效已开启" IsOn="{x:Bind Model.PlayAudio,Mode=TwoWay}"/>
+                    <ToggleSwitch Margin="10" OnContent="音效已开启" IsOn="{x:Bind Model.PlayAudio,Mode=TwoWay}">
+                        <ToggleSwitch.OffContent>
+                            <TextBlock>
+                                音效已关闭（贡献
+                                <Run Text="{x:Bind Model.PlayAudioLimit}"/>
+                                秒才能开）
+                            </TextBlock>
+                        </ToggleSwitch.OffContent>
+                    </ToggleSwitch>
                     <TextBlock Margin="10" Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap">对小娜说“续一秒”即可打开本软件，并能开启自动+1s功能。</TextBlock>
-                    <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">字体颜色</TextBlock>
-                    <muxc:ColorPicker Margin="10" IsColorChannelTextInputVisible="False" IsHexInputVisible="False" Color="{x:Bind Model.TextForegroundColor,Mode=TwoWay}"/>
                     <TextBlock Margin="10" Style="{ThemeResource SubtitleTextBlockStyle}">关于</TextBlock>
                     <HyperlinkButton Margin="10" NavigateUri="https://github.com/Berrysoft/add-one-second-UWP/">项目地址</HyperlinkButton>
                 </StackPanel>
@@ -59,16 +64,16 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <MediaElement x:Name="MyMediaElement" AutoPlay="True"/>
-                <TextBlock Foreground="{StaticResource TextForeground}" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30">
+                <TextBlock Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,30">
                     你的实际时间：
                     <Run Text="{x:Bind Model.RealTime,Mode=OneWay}"/>
                 </TextBlock>
                 <Viewbox Grid.Row="0">
-                    <TextBlock Foreground="{StaticResource TextForeground}" Text="{x:Bind Model.TotalTime,Mode=OneWay}" HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
+                    <TextBlock Text="{x:Bind Model.TotalTime,Mode=OneWay}" HorizontalAlignment="Center" Margin="3" FontFamily="Consolas" FontWeight="Bold"/>
                 </Viewbox>
 
                 <Viewbox Grid.Row="0">
-                    <TextBlock x:Name="addedOneSecondTextBlock" Foreground="{StaticResource TextForeground}" Text="+1s" FontFamily="Impact" RenderTransformOrigin=".5,1" Visibility="Collapsed">
+                    <TextBlock x:Name="addedOneSecondTextBlock" Text="+1s" FontFamily="Impact" RenderTransformOrigin=".5,1" Visibility="Collapsed">
                         <TextBlock.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
@@ -78,10 +83,10 @@
                 </Viewbox>
 
                 <Viewbox Grid.Row="1">
-                    <AppBarButton Foreground="{StaticResource TextForeground}" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
+                    <AppBarButton Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1" HorizontalAlignment="Left">
-                    <AppBarButton Foreground="{StaticResource TextForeground}" Icon="Setting" Label="设置" Click="Settings_Click"/>
+                    <AppBarButton Icon="Setting" Label="设置" Click="Settings_Click"/>
                 </Viewbox>
             </Grid>
         </SplitView.Content>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using Windows.System.Display;
-using Windows.UI;
 using Windows.UI.ViewManagement;
 
 namespace addOneSecond
@@ -17,8 +16,6 @@ namespace addOneSecond
         public DateTime RealTime => DateTime.Now.AddSeconds(Second);
 
         public TimeSpan TotalTime => TimeSpan.FromSeconds(Second);
-
-        public Color TextForegroundColor { get; set; } = Colors.Black;
 
         public bool FullScreen { get; set; }
         private void OnFullScreenChanged()
@@ -69,9 +66,10 @@ namespace addOneSecond
 
 
         public bool PlayAudio { get; set; }
+        public int PlayAudioLimit => 233;
         private void OnPlayAudioChanged()
         {
-            if (PlayAudio && Second < 2333)
+            if (PlayAudio && Second < PlayAudioLimit)
             {
                 PlayAudio = false;
             }
