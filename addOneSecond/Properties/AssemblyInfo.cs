@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("addOneSecond")]
-[assembly: AssemblyCopyright("No Copyright ©  2017")]
+[assembly: AssemblyCopyright("No Copyright ©  2017-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
