@@ -48,6 +48,10 @@ namespace addOneSecond
             {
                 SecondAdd();
             }
+            else
+            {
+                Model.RefreshRealTime();
+            }
         }
 
         private void SecondGet_Click(object sender, RoutedEventArgs e)  //+1s按键
@@ -59,7 +63,7 @@ namespace addOneSecond
         {
             if (MyMediaElement.CurrentState != MediaElementState.Playing && Model.PlayAudio)
             {
-                MyMediaElement.Source = new Uri("ms-appx:///Assets/wav/" + rankey.Next(1, 10) + ".wav");
+                MyMediaElement.Source = new Uri($"ms-appx:///Assets/wav/{rankey.Next(1, 10)}.wav");
             }
         }
 

@@ -7,13 +7,16 @@ namespace addOneSecond
 {
     class MainViewModel : INotifyPropertyChanged
     {
-#pragma warning disable 0067
         public event PropertyChangedEventHandler PropertyChanged;
-#pragma warning restore 0067
 
         public long Second { get; set; }
 
         public DateTime RealTime => DateTime.Now.AddSeconds(Second);
+
+        public void RefreshRealTime()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RealTime)));
+        }
 
         public TimeSpan TotalTime => TimeSpan.FromSeconds(Second);
 
