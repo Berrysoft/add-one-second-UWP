@@ -137,23 +137,29 @@
     <Content Include="Assets\Square310x310Logo.scale-150.png" />
     <Content Include="Assets\Square310x310Logo.scale-200.png" />
     <Content Include="Assets\Square310x310Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.altform-unplated_targetsize-48.png" />
     <Content Include="Assets\square44x44logo.scale-100.png" />
     <Content Include="Assets\square44x44logo.scale-125.png" />
     <Content Include="Assets\square44x44logo.scale-150.png" />
     <Content Include="Assets\square44x44logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-lightunplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
     <Content Include="Assets\square71x71logo.scale-100.png" />
     <Content Include="Assets\square71x71logo.scale-125.png" />
     <Content Include="Assets\square71x71logo.scale-150.png" />
     <Content Include="Assets\square71x71logo.scale-200.png" />
     <Content Include="Assets\square71x71logo.scale-400.png" />
-    <Content Include="Assets\storelogo.scale-100.png" />
-    <Content Include="Assets\storelogo.scale-125.png" />
-    <Content Include="Assets\storelogo.scale-150.png" />
-    <Content Include="Assets\storelogo.scale-200.png" />
-    <Content Include="Assets\storelogo.scale-400.png" />
     <Content Include="Assets\StoreLogo.scale.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale.scale-125.png" />
     <Content Include="Assets\StoreLogo.scale.scale-150.png" />
@@ -177,7 +183,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Properties\Default.rd.xml" />
-    <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />

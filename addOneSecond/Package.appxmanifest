@@ -30,6 +30,7 @@
           <uap:Rotation Preference="portraitFlipped" />
           <uap:Rotation Preference="landscapeFlipped" />
         </uap:InitialRotationPreference>
+        <uap:LockScreen BadgeLogo="Assets\BadgeLogo.png" Notification="badge"/>
       </uap:VisualElements>
       <Extensions>
         <Extension Category="windows.backgroundTasks" EntryPoint="addOneSecond.Background.LiveTileTask">
