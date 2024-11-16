@@ -126,7 +126,7 @@ namespace addOneSecond
                     }
                 }
             }
-            BackgroundHelper.RegesterLiveTile(Model.TileFresh);
+            BackgroundHelper.RegisterLiveTile(Model.TileFresh);
         }   //加载设置
 
         public void OpenAuto()  //语音调用的东西
