@@ -5,9 +5,8 @@
     xmlns:local="using:addOneSecond"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d"
-    Loaded="Page_Loaded" muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+    Loaded="Page_Loaded">
     <Page.DataContext>
         <local:MainViewModel x:Name="Model"/>
     </Page.DataContext>
@@ -32,7 +31,7 @@
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
-    <SplitView Name="mainSplitView" DisplayMode="Overlay" OpenPaneLength="360">
+    <SplitView Name="mainSplitView" DisplayMode="Overlay" PaneBackground="{ThemeResource SystemControlAcrylicElementBrush}" OpenPaneLength="360">
         <SplitView.Pane>
             <ScrollViewer>
                 <StackPanel Margin="10" Orientation="Vertical">
@@ -58,7 +57,7 @@
             </ScrollViewer>
         </SplitView.Pane>
         <SplitView.Content>
-            <Grid>
+            <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="5*"/>
                     <RowDefinition Height="*"/>
@@ -83,10 +82,10 @@
                 </Viewbox>
 
                 <Viewbox Grid.Row="1">
-                    <AppBarButton Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
+                    <AppBarButton Style="{ThemeResource AppBarButtonRevealStyle}" Icon="Clock" Label="+1s" FontFamily="Impact" Click="SecondGet_Click"/>
                 </Viewbox>
                 <Viewbox Grid.Row="1" HorizontalAlignment="Left">
-                    <AppBarButton Icon="Setting" Label="设置" Click="Settings_Click"/>
+                    <AppBarButton Style="{ThemeResource AppBarButtonRevealStyle}" Icon="Setting" Label="设置" Click="Settings_Click"/>
                 </Viewbox>
             </Grid>
         </SplitView.Content>
