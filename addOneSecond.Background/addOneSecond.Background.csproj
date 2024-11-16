@@ -4,8 +4,9 @@
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <UseUwp>true</UseUwp>
     <UseUwpTools>true</UseUwpTools>
-    <Platforms>x86;x64;arm64</Platforms>
+    <Platforms>AnyCPU;x64;arm64</Platforms>
     <PublishAot>true</PublishAot>
+    <IsAotCompatible>true</IsAotCompatible>
     <DisableRuntimeMarshalling>true</DisableRuntimeMarshalling>
   </PropertyGroup>
 
@@ -21,15 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Birthday.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="poems.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="tile.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Birthday.png" />
+    <Content Include="poems.txt" />
+    <Content Include="tile.xml" />
   </ItemGroup>
 
   <ItemGroup>
