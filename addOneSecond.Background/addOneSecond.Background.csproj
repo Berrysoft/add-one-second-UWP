@@ -15,18 +15,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
+    <None Remove="Birthday.png" />
+    <None Remove="poems.txt" />
+    <None Remove="tile.xml" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Birthday.png">
+    <Content Include="Birthday.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="poems.txt">
+    </Content>
+    <Content Include="poems.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="tile.xml">
+    </Content>
+    <Content Include="tile.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Windows.CsWinRT" Version="2.2.0" />
   </ItemGroup>
 </Project>
