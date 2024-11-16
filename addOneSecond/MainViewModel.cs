@@ -38,7 +38,7 @@ namespace addOneSecond
         public bool TileFresh { get; set; }
         private void OnTileFreshChanged()
         {
-            BackgroundHelper.RegesterLiveTile(TileFresh);
+            BackgroundHelper.RegisterLiveTile(TileFresh);
         }
 
         public bool DisplayRequest { get; set; }
